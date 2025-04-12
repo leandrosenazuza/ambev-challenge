@@ -5,12 +5,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ambev.DeveloperEvaluation.Domain.Common;
 
 namespace Ambev.DeveloperEvaluation.Domain.Entities
 {
     namespace YourNamespace.Entities
     {
-        public class Product
+        public class Product : BaseEntity
         {
             [Key]
             public int Id { get; set; }

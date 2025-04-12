@@ -1,3 +1,23 @@
+# How to run my project! 
+
+## Clone the project
+
+   Execute: "git clone git@github.com:leandrosenazuza/ambev-challenge.git"
+
+## First - Run the docker!
+
+   Inside the project directory, you have to initiate the docker: "docker run"
+
+   After, you have to up your docker image. So run: "docker-compose up -d", insite this first directory "ambev-challenge"
+
+## Secod - Run the migrations!
+
+   Inside the API directory, execute: 
+   1. dotnet ef migrations add InitialCreate
+   2. dotnet ef database update
+
+
+
 # Developer Evaluation Project
 
 `READ CAREFULLY`

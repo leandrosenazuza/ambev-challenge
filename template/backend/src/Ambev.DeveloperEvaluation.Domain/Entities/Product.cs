@@ -8,9 +8,7 @@ using System.Threading.Tasks;
 using Ambev.DeveloperEvaluation.Domain.Common;
 
 namespace Ambev.DeveloperEvaluation.Domain.Entities
-{
-    namespace YourNamespace.Entities
-    {
+{ 
         public class Product : BaseEntity
         {
             [Key]
@@ -50,4 +48,4 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
             public Product Product { get; set; }
         }
     }
-}
+

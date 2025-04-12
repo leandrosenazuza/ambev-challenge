@@ -10,7 +10,7 @@
 
    After, you have to up your docker image. So run: "docker-compose up -d", insite this first directory "ambev-challenge"
 
-## Secod - Run the migrations!
+## Second - Run the migrations!
 
    Inside the API directory, execute: 
    1. dotnet ef migrations add InitialCreate

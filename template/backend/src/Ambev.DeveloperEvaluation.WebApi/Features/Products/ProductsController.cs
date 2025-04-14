@@ -1,16 +1,11 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
 using Ambev.DeveloperEvaluation.Application.Products.GetProduct;
-using Ambev.DeveloperEvaluation.Application.Users.CreateUser;
-using Ambev.DeveloperEvaluation.Application.Users.GetUser;
 using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.CreateProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.GetProduct;
-using Ambev.DeveloperEvaluation.WebApi.Features.Users.CreateUser;
-using Ambev.DeveloperEvaluation.WebApi.Features.Users.GetUser;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using OneOf.Types;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Product;
 
@@ -26,8 +21,8 @@ public class ProductsController : BaseController
     {
         _mediator = mediator;
         _mapper = mapper;
-         _logger = logger;
-       
+        _logger = logger;
+
     }
 
     /// <summary>

@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -30,7 +28,7 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                     table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
-     
+
             migrationBuilder.CreateTable(
             name: "Products",
             columns: table => new

@@ -43,7 +43,8 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                 category = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                 image = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
                 rating_rate = table.Column<decimal>(type: "numeric(3,2)", precision: 3, scale: 2, nullable: false, defaultValue: 0m),
-                rating_count = table.Column<int>(type: "integer", nullable: false, defaultValue: 0)
+                rating_count = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
+                created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
             },
             constraints: table =>
             {

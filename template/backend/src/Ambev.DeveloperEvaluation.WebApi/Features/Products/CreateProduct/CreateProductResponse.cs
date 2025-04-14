@@ -1,6 +1,6 @@
-﻿namespace Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
 
-public class CreateProductResult
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Products.CreateProduct;
+public class CreateProductResponse
 {
     public int Id { get; set; }
     public string Title { get; set; }
@@ -8,11 +8,11 @@ public class CreateProductResult
     public string? Description { get; set; }
     public string? Category { get; set; }
     public string? Image { get; set; }
-    public ProductRatingResult? Rating { get; set; }
+    public ProductRatingResponse Rating { get; set; }
     public DateTime CreatedAt { get; set; }
 }
 
-public class ProductRatingResult
+public class ProductRatingResponse
 {
     public decimal Rate { get; set; }
     public int Count { get; set; }

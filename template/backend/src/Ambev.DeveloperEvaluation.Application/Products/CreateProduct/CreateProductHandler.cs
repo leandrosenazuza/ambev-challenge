@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using MediatR;
 using Ambev.DeveloperEvaluation.ORM.Repositories;
-using Ambev.DeveloperEvaluation.Application.Users.CreateUser;
 using Ambev.DeveloperEvaluation.Domain.Entities;
-using Ambev.DeveloperEvaluation.Domain.Repositories;
-
-using FluentValidation;
+using Microsoft.Extensions.Logging;
+using System.ComponentModel.DataAnnotations;
 
 namespace Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
 
@@ -13,29 +11,44 @@ public class CreateProductHandler : IRequestHandler<CreateProductCommand, Create
 {
     private readonly IProductRepository _productRepository;
     private readonly IMapper _mapper;
+    private readonly ILogger<CreateProductHandler> _logger;
 
-    public CreateProductHandler(IProductRepository productRepository, IMapper mapper)
+    public CreateProductHandler(
+        IProductRepository productRepository,
+        IMapper mapper,
+        ILogger<CreateProductHandler> logger)
     {
         _productRepository = productRepository;
         _mapper = mapper;
+        _logger = logger;
     }
 
-    public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
+    public async Task<CreateProductResult> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-        var validator = new CreateProductCommandValidator();
-        var validationResult = await validator.ValidateAsync(command, cancellationToken);
+        try
+        {
+            var validator = new CreateProductCommandValidator();
+            var validationResult = await validator.ValidateAsync(request, cancellationToken);
+            if (!validationResult.IsValid)
+                throw new ValidationException();
 
-        if (!validationResult.IsValid)
-            throw new ValidationException(validationResult.Errors);
+            var existingProduct = await _productRepository.GetByTitleAsync(request.Title, cancellationToken);
+            if (existingProduct != null)
+                throw new InvalidOperationException($"Product with title {request.Title} already exists");
 
-        var existingProduct = await _productRepository.GetByTitleAsync(command.Title, cancellationToken);
-        if (existingProduct != null)
-            throw new InvalidOperationException($"Product with title {command.Title} already exists");
+            var product = _mapper.Map<Product>(request);
 
-        var product = _mapper.Map<Product>(command);
+            var createdProduct = await _productRepository.CreateAsync(product, cancellationToken);
 
-        var createdProdcut = await _productRepository.CreateAsync(product, cancellationToken);
-        var result = _mapper.Map<CreateProductResult>(createdProdcut);
-        return result;
+            _logger.LogInformation($"Product created successfully: {createdProduct.Id}");
+
+            var result = _mapper.Map<CreateProductResult>(createdProduct);
+            return result;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error creating product: {ex.Message}");
+            throw;
+        }
     }
 }

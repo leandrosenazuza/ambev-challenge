@@ -9,43 +9,43 @@ using Ambev.DeveloperEvaluation.Domain.Common;
 
 namespace Ambev.DeveloperEvaluation.Domain.Entities
 { 
+        
+        [Table("Products")]
         public class Product : BaseEntity
         {
+            [Column("id")]
             [Key]
+            [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
             public int Id { get; set; }
 
+            [Column("title")]
             [Required]
-            [StringLength(200)]
-            public string Title { get; set; }
+            [MaxLength(255)]
+            public string Title { get; set; } = string.Empty;
 
-            [Column(TypeName = "decimal(18,2)")]
+            [Column("price")]
+            [Required]
+            [Range(0, double.MaxValue)]
             public decimal Price { get; set; }
 
-            [Required]
-            public string Description { get; set; }
+            [Column("description")]
+            public string? Description { get; set; }
 
-            [Required]
-            [StringLength(50)]
-            public string Category { get; set; }
+            [Column("category")]
+            [MaxLength(100)]
+            public string? Category { get; set; }
 
-            [Required]
-            public string Image { get; set; }
-            public Rating Rating { get; set; }
-        }
+            [Column("image")]
+            [MaxLength(500)]
+            public string? Image { get; set; }
 
-        public class Rating
-        {
-            [Key]
-            public int Id { get; set; }
+            [Column("rating_rate")]
+            [Range(0, 5)]
+            public decimal RatingRate { get; set; } = 0m;
 
-            [Column(TypeName = "decimal(3,1)")]
-            public decimal Rate { get; set; }
-
-            public int Count { get; set; }
-
-            public int ProductId { get; set; }
-
-            public Product Product { get; set; }
+            [Column("rating_count")]
+            [Range(0, int.MaxValue)]
+            public int RatingCount { get; set; } = 0;
         }
     }
 

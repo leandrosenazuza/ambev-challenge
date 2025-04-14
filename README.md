@@ -6,15 +6,15 @@
 
 ## First - Run the docker!
 
-   Inside the project directory, you have to initiate the docker: "docker run"
+   Inside the project directory, you have to initiate the docker.
 
    After, you have to up your docker image. So run: "docker-compose up -d", insite this first directory "ambev-challenge"
 
 ## Second - Run the migrations!
 
-   Inside the API directory, execute: 
+   Inside the API directory, run: 
    1. dotnet ef migrations add InitialCreate
-   2. dotnet ef database update
+   2. dotnet ef database update --context DefaultContext
 
 
 

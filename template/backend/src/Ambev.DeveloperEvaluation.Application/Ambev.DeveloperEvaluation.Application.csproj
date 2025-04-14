@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Products\CreateUser\" />
+    <Folder Include="Products\CreateProduct\" />
   </ItemGroup>
 
 </Project>

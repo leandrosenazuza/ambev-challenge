@@ -18,6 +18,9 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         /// <returns>The product if found, null otherwise</returns>
         Task<Product?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
 
+ 
+        Task<Product?> GetByTitleAsync(string title, CancellationToken cancellationToken = default);
+
         /// <summary>
         /// Retrieves products by category
         /// </summary>

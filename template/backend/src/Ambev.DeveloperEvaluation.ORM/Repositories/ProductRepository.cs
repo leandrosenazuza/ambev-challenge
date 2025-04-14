@@ -53,6 +53,13 @@ public class ProductRepository : IProductRepository
             .ToListAsync(cancellationToken);
     }
 
+
+    public async Task<Product?> GetByTitleAsync(string title, CancellationToken cancellationToken)
+    {
+        return await _context.Products
+            .FirstOrDefaultAsync(u => u.Title == title, cancellationToken);
+    }
+
     public async Task<IEnumerable<Product>> GetByCategoryAsync(
         string category,
         CancellationToken cancellationToken = default)
@@ -87,4 +94,5 @@ public class ProductRepository : IProductRepository
 
         return product;
     }
+
 }

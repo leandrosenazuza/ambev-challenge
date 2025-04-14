@@ -8,7 +8,7 @@ public class CreateProductProfile : Profile
 
     public CreateProductProfile()
     {
-        CreateMap<CreateProductCommand, User>();
-        CreateMap<User, CreateProductResult>();
+        CreateMap<CreateProductCommand, Product>();
+        CreateMap<Product, CreateProductResult>();
     }
 }

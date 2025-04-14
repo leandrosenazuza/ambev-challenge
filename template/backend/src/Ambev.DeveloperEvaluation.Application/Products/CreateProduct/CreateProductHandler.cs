@@ -27,7 +27,7 @@ public class CreateProductHandler : IRequestHandler<CreateProductCommand, Create
     {
         try
         {
-            var validator = new CreateProductCommandValidator();
+            var validator = new CreateProductValidator();
             var validationResult = await validator.ValidateAsync(request, cancellationToken);
             if (!validationResult.IsValid)
                 throw new ValidationException();

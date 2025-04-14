@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
 
-public class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
+public class CreateProductValidator : AbstractValidator<CreateProductCommand>
 {
-    public CreateProductCommandValidator()
+    public CreateProductValidator()
     {
         RuleFor(x => x.Title)
             .NotEmpty().WithMessage("Title is required")

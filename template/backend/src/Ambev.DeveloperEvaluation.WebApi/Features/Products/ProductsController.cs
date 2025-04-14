@@ -1,12 +1,16 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
+using Ambev.DeveloperEvaluation.Application.Products.GetProduct;
 using Ambev.DeveloperEvaluation.Application.Users.CreateUser;
+using Ambev.DeveloperEvaluation.Application.Users.GetUser;
 using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.CreateProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.GetProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Users.CreateUser;
+using Ambev.DeveloperEvaluation.WebApi.Features.Users.GetUser;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using OneOf.Types;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Product;
 
@@ -36,7 +40,7 @@ public class ProductsController : BaseController
     /// <param name="title">Filter by title</param>
     /// <param name="minPrice">Minimum price filter</param>
     /// <param name="maxPrice">Maximum price filter</param>
-    [HttpGet]
+ /*   [HttpGet]
     [ProducesResponseType(typeof(ApiResponseWithData<IEnumerable<GetProductResponse>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetProducts(
@@ -44,8 +48,14 @@ public class ProductsController : BaseController
         [FromQuery] int size = 10,
         CancellationToken cancellationToken = default)
     {
-        return BadRequest();
-    }
+        //var query = new GetProductByIdQuery(id);
+        var result = await _mediator.Send(query);
+
+        if (result == null)
+            return NotFound(new { Message = $"The Product {id} not exist." });
+
+        return Ok(result);
+    }*/
 
     /// <summary>
     /// Gets a product by ID
@@ -56,7 +66,22 @@ public class ProductsController : BaseController
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetProductById(int id, CancellationToken cancellationToken)
     {
-        return BadRequest();
+        var request = new GetProductRequest { Id = id };
+        var validator = new GetProductRequestValidator();
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+        if (!validationResult.IsValid)
+            return BadRequest(validationResult.Errors);
+
+        var command = _mapper.Map<GetProductCommand>(request.Id);
+        var response = await _mediator.Send(command, cancellationToken);
+
+        return Ok(new ApiResponseWithData<GetProductResponse>
+        {
+            Success = true,
+            Message = "Procut retrieved successfully",
+            Data = _mapper.Map<GetProductResponse>(response)
+        });
     }
 
 
@@ -71,16 +96,10 @@ public class ProductsController : BaseController
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)
-            return BadRequest(validationResult.Errors);
+            return BadRequest(new { Message = "Invalid!!!." });
 
         var command = _mapper.Map<CreateProductCommand>(request);
         var response = await _mediator.Send(command, cancellationToken);
-
-        return Created(string.Empty, new ApiResponseWithData<CreateProductResponse>
-        {
-            Success = true,
-            Message = "Product created successfully",
-            Data = _mapper.Map<CreateProductResponse>(response)
-        });
+        return CreatedAtAction(nameof(GetProductById), new { id = response.Id }, response);
     }
 }

@@ -5,10 +5,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Ambev.DeveloperEvaluation.ORM.Migrations
 {
-    /// <inheritdoc />
     public partial class InitialMigrations : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -27,6 +25,51 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+               name: "Sales",
+               columns: table => new
+               {
+                   SaleNumber = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
+                   SaleDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                   Customer = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                   TotalSaleAmount = table.Column<decimal>(type: "numeric", nullable: false),
+                   Branch = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                   IsCancelled = table.Column<bool>(type: "boolean", nullable: false)
+               },
+               constraints: table =>
+               {
+                   table.PrimaryKey("PK_Sales", x => x.SaleNumber);
+               });
+
+            migrationBuilder.CreateTable(
+                name: "SaleItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "serial", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    ProductId = table.Column<int>(type: "integer", nullable: false),
+                    Quantity = table.Column<int>(type: "integer", nullable: false),
+                    UnitPrice = table.Column<decimal>(type: "numeric", nullable: false),
+                    Discount = table.Column<decimal>(type: "numeric", nullable: false, defaultValue: 0),
+                    TotalAmount = table.Column<decimal>(type: "numeric", nullable: false),
+                    SaleNumber = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SaleItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SaleItems_Sales_SaleNumber",
+                        column: x => x.SaleNumber,
+                        principalTable: "Sales",
+                        principalColumn: "SaleNumber",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SaleItems_SaleNumber",
+                table: "SaleItems",
+                column: "SaleNumber");
 
 
             migrationBuilder.CreateTable(
@@ -57,7 +100,11 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
             migrationBuilder.DropTable(
                 name: "Users");
             migrationBuilder.DropTable(
-              name: "product");
+              name: "Products");
+            migrationBuilder.DropTable(
+               name: "SaleItems");
+            migrationBuilder.DropTable(
+                name: "Sales");
         }
     }
 }

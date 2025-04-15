@@ -27,6 +27,9 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         [Required]
         public decimal TotalAmount { get; set; }
 
+
+        public SaleItem() { }
+
         public SaleItem(int productId, int quantity, decimal unitPrice)
         {
             ProductId = productId;
@@ -47,7 +50,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
             {
                 if (Quantity >= 10)
                 {
-                    Discount = TotalAmount * 0.20m; 
+                    Discount = TotalAmount * 0.20m;
                 }
                 else
                 {
@@ -56,7 +59,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
             }
             else
             {
-                Discount = 0; 
+                Discount = 0;
             }
             CalculateTotalAmount();
         }

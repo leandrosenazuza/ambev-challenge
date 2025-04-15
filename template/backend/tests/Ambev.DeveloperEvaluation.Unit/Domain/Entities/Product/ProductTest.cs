@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Xunit;
+﻿using Ambev.DeveloperEvaluation.Domain.Entities;
 using FluentAssertions;
-using System;
-using Ambev.DeveloperEvaluation.Domain.Entities;
 using System.ComponentModel.DataAnnotations;
+using Xunit;
 
 namespace Ambev.DeveloperEvaluation.Tests.Domain
 {

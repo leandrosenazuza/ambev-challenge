@@ -1,9 +1,4 @@
-﻿using Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
-using Ambev.DeveloperEvaluation.Application.Products.GetProduct;
-using Ambev.DeveloperEvaluation.WebApi.Common;
-using Ambev.DeveloperEvaluation.WebApi.Features.Products.CreateProduct;
-using Ambev.DeveloperEvaluation.WebApi.Features.Products.GetProduct;
-using Ambev.DeveloperEvaluation.WebApi.Features.Sales;
+﻿using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.DeleteSale;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetSale;
@@ -33,12 +28,12 @@ public class SaleController : BaseController
     [ProducesResponseType(typeof(ApiResponseWithData<CreateSaleResponse>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateSale(
-       [FromBody] CreateSaleRequest request,
-       CancellationToken cancellationToken)
+    [FromBody] CreateSaleRequest request,
+    CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(request, cancellationToken);
 
-        if (result != null)
+        if (result == null)
         {
             return BadRequest(new ApiResponse
             {
@@ -52,15 +47,15 @@ public class SaleController : BaseController
             Data = (CreateSaleResponse)result
         };
 
-        return Ok();
+        return Ok(response);
     }
 
-    [HttpGet("{id:int}")]
+    [HttpGet("{saleNumber:guid}")]
     [ProducesResponseType(typeof(ApiResponseWithData<GetSaleResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetSale([FromRoute] int id, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetSale([FromRoute] Guid saleNumber, CancellationToken cancellationToken)
     {
-        var request = new GetSaleRequest { Id = id };
+        var request = new GetSaleRequest { SaleNumber = saleNumber };
         var result = await _mediator.Send(request, cancellationToken);
 
         if (result == null)
@@ -91,26 +86,28 @@ public class SaleController : BaseController
         });
     }
 
-    [HttpPut("{id:int}")]
+    [HttpPut("{saleNumber:guid}")]
     [ProducesResponseType(typeof(ApiResponseWithData<UpdateSaleResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateSale([FromRoute] int id, [FromBody] UpdateSaleRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateSale([FromRoute] Guid saleNumber, [FromBody] UpdateSaleRequest request, CancellationToken cancellationToken)
     {
-        if (id != null)
+        // Assuming UpdateSaleRequest contains a SaleNumber property.
+        if (saleNumber != request.SaleNumber)
         {
             return BadRequest(new ApiResponse
             {
-                Message = "The Sale ID in the route does not match the body"
+                Message = "The Sale identifier in the route does not match the request body."
             });
         }
 
         var result = await _mediator.Send(request, cancellationToken);
 
-        if (result != null)
+        if (result == null)
         {
             return NotFound(new ApiResponse
             {
-                Message =  "Sale not found."
+                Message = "Sale not found."
             });
         }
 
@@ -121,15 +118,15 @@ public class SaleController : BaseController
         });
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete("{saleNumber:guid}")]
     [ProducesResponseType(typeof(ApiResponseWithData<DeleteSaleResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteSale([FromRoute] int id, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteSale([FromRoute] Guid saleNumber, CancellationToken cancellationToken)
     {
-        var request = new DeleteSaleRequest { Id = id };
+        var request = new DeleteSaleRequest { SaleNumber = saleNumber };
         var result = await _mediator.Send(request, cancellationToken);
 
-        if (result != null)
+        if (result == null)
         {
             return NotFound(new ApiResponse
             {

@@ -2,6 +2,6 @@
 {
     public class DeleteSaleRequest
     {
-        public int Id { get; internal set; }
+        public Guid SaleNumber { get; internal set; }
     }
 }

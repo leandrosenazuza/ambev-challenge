@@ -1,5 +1,4 @@
-﻿using System;
-using Ambev.DeveloperEvaluation.Domain.Entities;
+﻿using Ambev.DeveloperEvaluation.Domain.Entities;
 
 namespace Ambev.DeveloperEvaluation.Tests.Domain
 {
@@ -75,11 +74,11 @@ namespace Ambev.DeveloperEvaluation.Tests.Domain
             return new Product
             {
                 Id = int.MaxValue,
-                Title = new string('A', 255), 
+                Title = new string('A', 255),
                 Price = decimal.MaxValue,
                 Description = new string('A', 1000),
-                Category = new string('A', 100), 
-                Image = new string('A', 500), 
+                Category = new string('A', 100),
+                Image = new string('A', 500),
                 RatingRate = 5m,
                 RatingCount = int.MaxValue
             };

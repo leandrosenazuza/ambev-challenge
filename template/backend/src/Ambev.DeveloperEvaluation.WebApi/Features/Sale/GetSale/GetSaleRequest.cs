@@ -1,7 +1,8 @@
-﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetSale
+﻿
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetSale
 {
     public class GetSaleRequest
     {
-        public int Id { get; internal set; }
+        public Guid SaleNumber { get; internal set; }
     }
 }

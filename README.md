@@ -13,7 +13,7 @@
 ## Second - Run the migrations!
 
    Inside the API directory, run: 
-   1. dotnet ef migrations add InitialCreate
+   1. dotnet ef migrations add InitialMigration --context DefaultContext
    2. dotnet ef database update --context DefaultContext
 
 

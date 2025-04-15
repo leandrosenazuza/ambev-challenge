@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: sa
       POSTGRES_PASSWORD: sa
     ports:
-      - "5000:5432"
+      - "5005:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 

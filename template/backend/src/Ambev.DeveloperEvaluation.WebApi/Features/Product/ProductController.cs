@@ -12,17 +12,17 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using OneOf.Types;
 
-namespace Ambev.DeveloperEvaluation.WebApi.Features.Product;
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Products;
 
 [ApiController]
-[Route("api/[controller]")]
-public class ProductsController : BaseController
+[Route("api/product")]
+public class ProductController : BaseController
 {
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
-    private readonly ILogger<ProductsController> _logger;
+    private readonly ILogger<ProductController> _logger;
 
-    public ProductsController(IMediator mediator, IMapper mapper, ILogger<ProductsController> logger)
+    public ProductController(IMediator mediator, IMapper mapper, ILogger<ProductController> logger)
     {
         _mediator = mediator;
         _mapper = mapper;

@@ -43,28 +43,28 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                });
 
             migrationBuilder.CreateTable(
-                name: "SaleItems",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "serial", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    ProductId = table.Column<int>(type: "integer", nullable: false),
-                    Quantity = table.Column<int>(type: "integer", nullable: false),
-                    UnitPrice = table.Column<decimal>(type: "numeric", nullable: false),
-                    Discount = table.Column<decimal>(type: "numeric", nullable: false, defaultValue: 0),
-                    TotalAmount = table.Column<decimal>(type: "numeric", nullable: false),
-                    SaleNumber = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SaleItems", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SaleItems_Sales_SaleNumber",
-                        column: x => x.SaleNumber,
-                        principalTable: "Sales",
-                        principalColumn: "SaleNumber",
-                        onDelete: ReferentialAction.Cascade);
-                });
+                 name: "SaleItems",
+                 columns: table => new
+                 {
+                     Id = table.Column<int>(type: "serial", nullable: false)
+                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                     ProductId = table.Column<int>(type: "integer", nullable: false),
+                     Quantity = table.Column<int>(type: "integer", nullable: false),
+                     UnitPrice = table.Column<decimal>(type: "numeric", nullable: false),
+                     Discount = table.Column<decimal>(type: "numeric", nullable: false, defaultValue: 0),
+                     TotalAmount = table.Column<decimal>(type: "numeric", nullable: false),
+                     SaleNumber = table.Column<Guid>(type: "uuid", nullable: false)
+                 },
+                 constraints: table =>
+                 {
+                     table.PrimaryKey("PK_SaleItems", x => x.Id);
+                     table.ForeignKey(
+                         name: "FK_SaleItems_Sales_SaleNumber",
+                         column: x => x.SaleNumber,
+                         principalTable: "Sales",
+                         principalColumn: "SaleNumber",
+                         onDelete: ReferentialAction.Cascade);
+                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_SaleItems_SaleNumber",

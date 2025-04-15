@@ -47,7 +47,6 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         }
         public void PublishEvent(string eventType)
         {
-            // Log the event (replace with actual event publishing logic)
             Console.WriteLine($"Event Published: {eventType} for Sale Number: {SaleNumber}");
         }
     }

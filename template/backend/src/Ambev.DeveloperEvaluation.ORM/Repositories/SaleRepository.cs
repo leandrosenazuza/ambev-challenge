@@ -1,6 +1,9 @@
-﻿
-using Ambev.DeveloperEvaluation.Domain.Entities;
+﻿using Ambev.DeveloperEvaluation.Domain.Entities;
+using Ambev.DeveloperEvaluation.WebApi.Common.Pagination;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Ambev.DeveloperEvaluation.ORM.Repositories
 {
@@ -12,17 +15,17 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         {
             _context = context;
         }
+
         public async Task<Sale> AddAsync(Sale sale, CancellationToken cancellationToken)
         {
             await _context.Sales.AddAsync(sale, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
             return sale;
         }
+
         public async Task<Sale> CreateAsync(Sale sale, CancellationToken cancellationToken)
         {
-            await _context.Sales.AddAsync(sale, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
-            return sale;
+            return await AddAsync(sale, cancellationToken);
         }
 
         public async Task<bool> DeleteAsync(Guid saleNumber, CancellationToken cancellationToken)
@@ -36,9 +39,23 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
             return affectedRows > 0;
         }
 
-        public async Task<IEnumerable<Sale>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<PaginatedResult<Sale>> GetAllAsync(PaginationParameters parameters, CancellationToken cancellationToken)
         {
-            return await _context.Sales.ToListAsync(cancellationToken);
+            var query = _context.Sales.AsQueryable();
+
+            var totalItems = await query.CountAsync(cancellationToken);
+            var items = await query
+                .Skip((parameters.Page - 1) * parameters.PageSize)
+                .Take(parameters.PageSize)
+                .ToListAsync(cancellationToken);
+
+            return new PaginatedResult<Sale>
+            {
+                Items = items,
+                TotalItems = totalItems,
+                CurrentPage = parameters.Page,
+                TotalPages = (int)Math.Ceiling(totalItems / (double)parameters.PageSize)
+            };
         }
 
         public async Task<Sale> GetBySaleNumberAsync(Guid saleNumber, CancellationToken cancellationToken)

@@ -1,13 +1,12 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Entities;
+﻿using Ambev.DeveloperEvaluation.Application.Sales.DTO;
+using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.ORM.Repositories;
 using AutoMapper;
 using MediatR;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale
 {
-    // It is assumed that CreateSaleCommand implements IRequest
-    // and contains properties for SaleDate, Customer, Branch, IsCancelled, and a list of Item DTOs.
-    public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleResult>
+    public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, SaleDTO>
     {
         private readonly ISaleRepository _saleRepository;
         private readonly IMapper _mapper;
@@ -19,7 +18,7 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale
             _mapper = mapper;
         }
 
-        public async Task<CreateSaleResult> Handle(CreateSaleCommand command, CancellationToken cancellationToken)
+        public async Task<SaleDTO> Handle(CreateSaleCommand command, CancellationToken cancellationToken)
         {
             var existingSale = await _saleRepository.GetBySaleNumberAsync(command.SaleNumber, cancellationToken);
             if (existingSale != null)
@@ -31,8 +30,9 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale
             await _saleRepository.CreateAsync(sale, cancellationToken);
 
             //sale.PublishEvent("SaleCreated"); TODO
-            var response = _mapper.Map<CreateSaleResult>(sale);
+            var response = _mapper.Map<SaleDTO>(sale);
             return response;
         }
     }
 }
+

@@ -1,9 +1,8 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
+using Ambev.DeveloperEvaluation.Application.Sales.DTO;
 using Ambev.DeveloperEvaluation.WebApi.Common;
-using Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale;
-using Ambev.DeveloperEvaluation.WebApi.Features.Sales.DeleteSale;
-using Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetSale;
-using Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale;
+using Ambev.DeveloperEvaluation.WebApi.Common.Pagination;
+using Ambev.DeveloperEvaluation.WebApi.Features.Sales.Query;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -15,145 +14,94 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales;
 public class SaleController : BaseController
 {
     private readonly IMediator _mediator;
-    private readonly IMapper _mapper;
     private readonly ILogger<SaleController> _logger;
 
     public SaleController(IMediator mediator, IMapper mapper, ILogger<SaleController> logger)
     {
         _mediator = mediator;
-        _mapper = mapper;
         _logger = logger;
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(ApiResponseWithData<CreateSaleResponse>), StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status409Conflict)]
     public async Task<IActionResult> CreateSale(
-     [FromBody] CreateSaleRequest request,
-     CancellationToken cancellationToken)
+      [FromBody] SaleDTO saleDto,
+      CancellationToken cancellationToken)
     {
-        var validator = new CreateSaleRequestValidator();
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
-
-        if (!validationResult.IsValid)
+        var command = new CreateSaleCommand
         {
-            return BadRequest(validationResult.Errors);
-        }
+            SaleNumber = saleDto.SaleNumber,
+            SaleDate = saleDto.SaleDate,
+            Customer = saleDto.Customer,
+            Branch = saleDto.Branch,
+            Items = saleDto.Items,
+            IsCancelled = saleDto.IsCancelled
+        };
 
-        var getSaleRequest = new GetSaleRequest { SaleNumber = request.SaleNumber };
-        var existingSale = await _mediator.Send(getSaleRequest, cancellationToken);
-
-        if (existingSale != null)
-        {
-            return Conflict(new ApiResponse
-            {
-                Message = "Sale already exists"
-            });
-        }
-
-        var command = _mapper.Map<CreateSaleCommand>(request);
         var result = await _mediator.Send(command, cancellationToken);
-
-        return Created(string.Empty, new ApiResponseWithData<CreateSaleResponse>
-        {
-            Success = true,
-            Message = "Sale created successfully",
-            Data = _mapper.Map<CreateSaleResponse>(result)
-        });
+        return CreatedAtAction(nameof(GetSaleBySaleNumber), new { saleNumber = result.SaleNumber }, result);
     }
 
-
     [HttpGet("{saleNumber:guid}")]
-    [ProducesResponseType(typeof(ApiResponseWithData<GetSaleResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetSale([FromRoute] Guid saleNumber, CancellationToken cancellationToken)
+    public async Task<ActionResult<SaleDTO>> GetSaleBySaleNumber(Guid saleNumber)
     {
-        var request = new GetSaleRequest { SaleNumber = saleNumber };
-        var result = await _mediator.Send(request, cancellationToken);
+        var query = new GetSaleBySaleNumberQuery(saleNumber);
+        var result = await _mediator.Send(query);
 
         if (result == null)
         {
-            return NotFound(new ApiResponse
-            {
-                Message = "Sale not found"
-            });
+            return NotFound(new { Message = "Sale not found" });
         }
-
-        return Created(string.Empty, new ApiResponseWithData<GetSaleResponse>
-        {
-            Success = true,
-            Message = "Sale taked successfully",
-            Data = _mapper.Map<GetSaleResponse>(result)
-        });
+        return result; 
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(ApiResponseWithData<GetAllSalesResponse>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAllSales([FromQuery] GetAllSalesRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAllSales(PaginationParameters parameters, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(request, cancellationToken);
-
-        return Ok(new ApiResponseWithData<GetAllSalesResponse>
-        {
-            Message = "Sales list retrieved successfully",
-            Data = (GetAllSalesResponse)result
-        });
+        var result = await _mediator.Send(new GetAllSaleQuery(parameters), cancellationToken);
+        return Ok(result);
     }
 
     [HttpPut("{saleNumber:guid}")]
-    [ProducesResponseType(typeof(ApiResponseWithData<UpdateSaleResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateSale([FromRoute] Guid saleNumber, [FromBody] UpdateSaleRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateSale([FromRoute] Guid saleNumber, [FromBody] SaleDTO saleDto, CancellationToken cancellationToken)
     {
-        // Assuming UpdateSaleRequest contains a SaleNumber property.
-        if (saleNumber != request.SaleNumber)
+        if (saleNumber != saleDto.SaleNumber)
         {
-            return BadRequest(new ApiResponse
-            {
-                Message = "The Sale identifier in the route does not match the request body."
-            });
+            return BadRequest(new { Message = "The Sale identifier in the route does not match the request body." });
         }
 
-        var result = await _mediator.Send(request, cancellationToken);
+        var command = new UpdateSaleCommand
+        {
+            // Map properties from SaleDTO to UpdateSaleCommand if necessary
+            SaleNumber = saleDto.SaleNumber,
+            SaleDate = saleDto.SaleDate,
+            Customer = saleDto.Customer,
+            TotalSaleAmount = saleDto.TotalSaleAmount,
+            Branch = saleDto.Branch,
+            Items = saleDto.Items,
+            IsCancelled = saleDto.IsCancelled
+        };
+
+        var result = await _mediator.Send(command, cancellationToken);
 
         if (result == null)
         {
-            return NotFound(new ApiResponse
-            {
-                Message = "Sale not found."
-            });
+            return NotFound(new { Message = "Sale not found." });
         }
 
-        return Ok(new ApiResponseWithData<UpdateSaleResponse>
-        {
-            Message = "Sale updated successfully",
-            Data = (UpdateSaleResponse)result
-        });
+        return Ok(result); 
     }
 
     [HttpDelete("{saleNumber:guid}")]
-    [ProducesResponseType(typeof(ApiResponseWithData<DeleteSaleResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteSale([FromRoute] Guid saleNumber, CancellationToken cancellationToken)
     {
-        var request = new DeleteSaleRequest { SaleNumber = saleNumber };
-        var result = await _mediator.Send(request, cancellationToken);
+        var command = new DeleteSaleCommand { SaleNumber = saleNumber }; 
+        var result = await _mediator.Send(command, cancellationToken);
 
         if (result == null)
         {
-            return NotFound(new ApiResponse
-            {
-                Message = "Sale not found."
-            });
+            return NotFound(new { Message = "Sale not found." });
         }
 
-        return Ok(new ApiResponseWithData<DeleteSaleResponse>
-        {
-            Message = "Sale deleted successfully",
-            Data = (DeleteSaleResponse)result
-        });
+        return Ok(new { Message = "Sale deleted successfully", Data = result }); 
     }
 }
-

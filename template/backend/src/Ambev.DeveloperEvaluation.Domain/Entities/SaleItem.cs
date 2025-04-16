@@ -29,7 +29,42 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         public decimal TotalAmount { get; set; }
 
 
-        public SaleItem() { }
+        public SaleItem(int productId, int quantity, decimal unitPrice, decimal discount)
+        {
+            ValidateProductId(productId);
+            ValidateQuantity(quantity);
+            ValidateUnitPrice(unitPrice);
+            ValidateDiscount(discount);
+
+            ProductId = productId;
+            Quantity = quantity;
+            UnitPrice = unitPrice;
+            Discount = discount;
+        }
+
+        private void ValidateProductId(int productId)
+        {
+            if (productId <= 0)
+                throw new ArgumentOutOfRangeException(nameof(productId), "ProductId must be greater than zero.");
+        }
+
+        private void ValidateQuantity(int quantity)
+        {
+            if (quantity <= 0)
+                throw new ArgumentOutOfRangeException(nameof(quantity), "Quantity must be greater than zero.");
+        }
+
+        private void ValidateUnitPrice(decimal unitPrice)
+        {
+            if (unitPrice <= 0)
+                throw new ArgumentOutOfRangeException(nameof(unitPrice), "Unit price must be greater than zero.");
+        }
+
+        private void ValidateDiscount(decimal discount)
+        {
+            if (discount < 0 || discount > 1)
+                throw new ArgumentOutOfRangeException(nameof(discount), "Discount must be between 0 and 1.");
+        }
 
         public SaleItem(int productId, int quantity, decimal unitPrice)
         {

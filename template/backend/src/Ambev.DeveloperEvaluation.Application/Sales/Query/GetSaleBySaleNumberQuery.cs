@@ -9,7 +9,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.Query
 
         public GetSaleBySaleNumberQuery(Guid SaleNumber)
         {
-            SaleNumber = SaleNumber;
+            this.SaleNumber = SaleNumber;
         }
     }
 }

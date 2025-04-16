@@ -3,9 +3,9 @@
 namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale
 {
 
-    public class CreateSaleCommandValidator : AbstractValidator<CreateSaleCommand>
+    public class CreateSaleValidator : AbstractValidator<CreateSaleCommand>
     {
-        public CreateSaleCommandValidator()
+        public CreateSaleValidator()
         {
             RuleFor(x => x.Customer)
                 .NotEmpty().WithMessage("Customer is required.")
@@ -25,7 +25,7 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale
         }
     }
 
-    public class SaleItemDtoValidator : AbstractValidator<SaleItemDto>
+    public class SaleItemDtoValidator : AbstractValidator<SaleItemResult>
     {
         public SaleItemDtoValidator()
         {

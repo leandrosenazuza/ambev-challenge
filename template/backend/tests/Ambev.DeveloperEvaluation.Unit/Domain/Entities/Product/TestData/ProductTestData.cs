@@ -22,8 +22,8 @@ namespace Ambev.DeveloperEvaluation.Tests.Domain
 
         public static List<Product> GetValidProducts()
         {
-            return new List<Product>
-            {
+            return
+            [
                 new Product
                 {
                     Id = 1,
@@ -57,7 +57,7 @@ namespace Ambev.DeveloperEvaluation.Tests.Domain
                     RatingRate = 4.7m,
                     RatingCount = 120
                 }
-            };
+            ];
         }
 
         public static Product GetProductWithMinimumRequiredFields()

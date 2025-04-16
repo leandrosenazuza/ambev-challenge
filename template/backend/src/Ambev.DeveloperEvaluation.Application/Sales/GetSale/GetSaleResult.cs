@@ -8,7 +8,7 @@
         public string Branch { get; set; }
         public decimal TotalSaleAmount { get; set; }
         public bool IsCancelled { get; set; }
-        public List<SaleItemResult> Items { get; set; } = new List<SaleItemResult>();
+        public List<SaleItemResult> Items { get; set; } = [];
 
         public GetSaleResult() { }
     }

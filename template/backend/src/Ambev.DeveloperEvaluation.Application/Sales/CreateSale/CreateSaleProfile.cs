@@ -1,4 +1,5 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Entities;
+﻿using Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
+using Ambev.DeveloperEvaluation.Domain.Entities;
 using AutoMapper;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale
@@ -11,6 +12,8 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale
             CreateMap<CreateSaleCommand, Sale>()
                .ForMember(dest => dest.Items, opt => opt.MapFrom(src =>
                    src.Items.Select(item => new SaleItem(item.ProductId, item.Quantity, item.UnitPrice))));
+            CreateMap<Sale, CreateSaleResult>();
+
         }
     }
 }

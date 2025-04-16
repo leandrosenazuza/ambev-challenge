@@ -2,7 +2,7 @@
 using Ambev.DeveloperEvaluation.WebApi.Features.Auth.AuthenticateUserFeature;
 using AutoMapper;
 
-namespace Ambev.DeveloperEvaluation.WebApi.Mappings;
+namespace Ambev.DeveloperEvaluation.WebApi.Mappings.Auths;
 
 public class AuthenticateUserRequestProfile : Profile
 {

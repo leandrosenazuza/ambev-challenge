@@ -1,4 +1,5 @@
-﻿using Ambev.DeveloperEvaluation.WebApi.Common;
+﻿using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
+using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.DeleteSale;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetSale;
@@ -27,28 +28,41 @@ public class SaleController : BaseController
     [HttpPost]
     [ProducesResponseType(typeof(ApiResponseWithData<CreateSaleResponse>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status409Conflict)]
     public async Task<IActionResult> CreateSale(
-    [FromBody] CreateSaleRequest request,
-    CancellationToken cancellationToken)
+     [FromBody] CreateSaleRequest request,
+     CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(request, cancellationToken);
+        var validator = new CreateSaleRequestValidator();
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
-        if (result == null)
+        if (!validationResult.IsValid)
         {
-            return BadRequest(new ApiResponse
+            return BadRequest(validationResult.Errors);
+        }
+
+        var getSaleRequest = new GetSaleRequest { SaleNumber = request.SaleNumber };
+        var existingSale = await _mediator.Send(getSaleRequest, cancellationToken);
+
+        if (existingSale != null)
+        {
+            return Conflict(new ApiResponse
             {
-                Message = "Error creating sale."
+                Message = "Sale already exists"
             });
         }
 
-        var response = new ApiResponseWithData<CreateSaleResponse>
-        {
-            Message = "Sale created successfully",
-            Data = (CreateSaleResponse)result
-        };
+        var command = _mapper.Map<CreateSaleCommand>(request);
+        var result = await _mediator.Send(command, cancellationToken);
 
-        return Ok(response);
+        return Created(string.Empty, new ApiResponseWithData<CreateSaleResponse>
+        {
+            Success = true,
+            Message = "Sale created successfully",
+            Data = _mapper.Map<CreateSaleResponse>(result)
+        });
     }
+
 
     [HttpGet("{saleNumber:guid}")]
     [ProducesResponseType(typeof(ApiResponseWithData<GetSaleResponse>), StatusCodes.Status200OK)]
@@ -66,10 +80,11 @@ public class SaleController : BaseController
             });
         }
 
-        return Ok(new ApiResponseWithData<GetSaleResponse>
+        return Created(string.Empty, new ApiResponseWithData<GetSaleResponse>
         {
-            Message = "Sale retrieved successfully",
-            Data = (GetSaleResponse)result
+            Success = true,
+            Message = "Sale taked successfully",
+            Data = _mapper.Map<GetSaleResponse>(result)
         });
     }
 

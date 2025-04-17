@@ -1,4 +1,6 @@
-﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Products.DTO;
+﻿using Ambev.DeveloperEvaluation.Application.Products.DTO;
+
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Products.DTO;
 public class ProductDTO
     {
         public int Id { get; set; }
@@ -11,12 +13,5 @@ public class ProductDTO
         public string? Category { get; set; }
         public string? Image { get; set; }
         public ProductRatingDTO Rating { get; set; }
-        public DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.Now.Date;
     }
-
-    public class ProductRatingDTO
-    {
-        public decimal Rate { get; set; }
-        public int Count { get; set; }
-    }
-

@@ -37,7 +37,7 @@ public class CreateProductHandler : IRequestHandler<CreateProductCommand, Produc
 
             var createdProduct = await _productRepository.CreateAsync(product, cancellationToken);
 
-            _logger.LogInformation($"Product created successfully: {createdProduct.Id}");
+            if(createdProduct != null) _logger.LogInformation($"Product created successfully: {createdProduct.Id}");
 
             var result = _mapper.Map<ProductDTO>(createdProduct);
             return result;

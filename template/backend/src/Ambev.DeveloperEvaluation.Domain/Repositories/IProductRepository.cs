@@ -9,7 +9,7 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         Task<Product> AddAsync(Product product, CancellationToken cancellationToken = default);
         Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default);
         Task<PaginatedResult<Product>> GetAllAsync(PaginationParameters parameters, CancellationToken cancellationToken = default);
-        Task<Product> UpdateAsync(Product product, CancellationToken cancellationToken);
-        Task<Product> GetByIdAsync(int id, CancellationToken cancellationToken);
+        Task<Product> UpdateAsync(Product product, CancellationToken cancellationToken = default);
+        Task<Product> GetByIdAsync(int id, CancellationToken cancellationToken = default);
     }
 }

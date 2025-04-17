@@ -16,7 +16,7 @@
    1. dotnet ef migrations add InitialMigration --context DefaultContext
    2. dotnet ef database update --context DefaultContext
 
-## Take the collections in the root of the project and put it in you postman
+## Third - Take the collections in the root of the project and put it in you postman
 
    1. To consume any request, you have to authenticate your api. Until you don't create any user, you have to use the standard user. Here's the curl to generate the token:
    curl --location 'https://localhost:7181/api/Auth' \
@@ -27,6 +27,10 @@
   "password": "Admin@123"
 }'
 
+## Forth - Use the collection to test!
+   1. Import the archieve - AMBEV-CHALLENGE.postman_collection
+
+## Run the tests to ensure that everything is working
 
 
 ## What I think I achieved with this project:
@@ -42,7 +46,7 @@
 9. API design and RESTful service implementation ✅
 10. Version control with Git  ✅
 11. Understanding of both relational and non relational database systems ✅
-12. Data generation and management for testing purposes (using Faker) ✅
+12. Data generation and management for testing purposes (using Faker) ✅ | ❌
 13. Code organization and project structure ✅
 14. Implementation of pagination, filtering, and sorting in APIs✅
 15. Error handling and API response formatting ✅
@@ -53,6 +57,12 @@
 20. Problem-solving and analytical skills ✅
 21. Attention to detail in implementing business logic ✅ | 🚧 Only the cart api is not implemented.
 22. Ability to work with and integrate multiple technologies and frameworks ✅
+
+## If I had more time:
+
+1. I could create the messager send to a MQTT server each sale operation;
+2. More tests;
+3. The cart api.
 
 # Developer Evaluation Project
 

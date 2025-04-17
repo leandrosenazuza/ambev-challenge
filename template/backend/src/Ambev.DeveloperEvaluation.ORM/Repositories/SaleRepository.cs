@@ -40,7 +40,13 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         {
             var query = _context.Sales.Include(s => s.Items).AsQueryable();
 
+            query = ApplyFilters(query, parameters);
+
+            query = ApplyOrdering(query, parameters.OrderBy);
+
             var totalItems = await query.CountAsync(cancellationToken);
+
+            // Apply Pagination
             var items = await query
                 .Skip((parameters.Page - 1) * parameters.PageSize)
                 .Take(parameters.PageSize)
@@ -53,6 +59,70 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
                 CurrentPage = parameters.Page,
                 TotalPages = (int)Math.Ceiling(totalItems / (double)parameters.PageSize)
             };
+        }
+
+        private IQueryable<Sale> ApplyFilters(IQueryable<Sale> query, PaginationParameters parameters)
+        {
+            if (!string.IsNullOrEmpty(parameters.CustomerName))
+            {
+                query = query.Where(s => s.Customer.Contains(parameters.CustomerName));
+            }
+
+            if (parameters.MinTotal.HasValue)
+            {
+                query = query.Where(s => s.TotalSaleAmount >= parameters.MinTotal.Value);
+            }
+
+            if (parameters.MaxTotal.HasValue)
+            {
+                query = query.Where(s => s.TotalSaleAmount <= parameters.MaxTotal.Value);
+            }
+
+            if (parameters.MinDate.HasValue)
+            {
+                query = query.Where(s => s.SaleDate >= parameters.MinDate.Value);
+            }
+
+            if (parameters.MaxDate.HasValue)
+            {
+                query = query.Where(s => s.SaleDate <= parameters.MaxDate.Value);
+            }
+
+            return query;
+        }
+
+        private IQueryable<Sale> ApplyOrdering(IQueryable<Sale> query, string? orderBy)
+        {
+            if (string.IsNullOrEmpty(orderBy))
+            {
+                return query.OrderByDescending(s => s.SaleDate); 
+            }
+
+            // Parse the ordering string
+            var orderClauses = orderBy.Split(',');
+            var ordered = false;
+
+            foreach (var clause in orderClauses)
+            {
+                var trimmedClause = clause.Trim();
+                var descending = trimmedClause.EndsWith(" desc", StringComparison.OrdinalIgnoreCase);
+                var propertyName = descending ? trimmedClause[..^5].Trim() : trimmedClause;
+
+                query = (propertyName.ToLower(), ordered) switch
+                {
+                    ("date", false) => descending ? query.OrderByDescending(s => s.SaleDate) : query.OrderBy(s => s.SaleDate),
+                    ("date", true) => descending ? ((IOrderedQueryable<Sale>)query).ThenByDescending(s => s.SaleDate) : ((IOrderedQueryable<Sale>)query).ThenBy(s => s.SaleDate),
+                    ("total", false) => descending ? query.OrderByDescending(s => s.TotalSaleAmount) : query.OrderBy(s => s.SaleDate),
+                    ("total", true) => descending ? ((IOrderedQueryable<Sale>)query).ThenByDescending(s => s.SaleDate) : ((IOrderedQueryable<Sale>)query).ThenBy(s => s.TotalSaleAmount),
+                    ("customername", false) => descending ? query.OrderByDescending(s => s.Customer) : query.OrderBy(s => s.Customer),
+                    ("customername", true) => descending ? ((IOrderedQueryable<Sale>)query).ThenByDescending(s => s.Customer) : ((IOrderedQueryable<Sale>)query).ThenBy(s => s.Customer),
+                    _ => query
+                };
+
+                ordered = true;
+            }
+
+            return query;
         }
 
         public async Task<Sale> GetBySaleNumberAsync(Guid saleNumber, CancellationToken cancellationToken)

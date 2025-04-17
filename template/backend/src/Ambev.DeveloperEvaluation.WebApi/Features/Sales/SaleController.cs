@@ -43,15 +43,15 @@ public class SaleController : BaseController
     }
 
     [HttpGet("{saleNumber:guid}")]
-    public async Task<ActionResult<SaleDTO>> GetSaleBySaleNumber(Guid saleNumber)
+    public async Task<IActionResult> GetSaleBySaleNumber(Guid saleNumber)
     {
         var query = new GetSaleBySaleNumberQuery(saleNumber);
         var result = await _mediator.Send(query);
-        return result;
+        return Ok(result);
     }
 
     [HttpGet("all")]
-    public async Task<IActionResult> GetAllSales(PaginationParameters parameters, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAllSales([FromQuery] PaginationParameters parameters, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new GetAllSaleQuery(parameters), cancellationToken);
         return Ok(result);

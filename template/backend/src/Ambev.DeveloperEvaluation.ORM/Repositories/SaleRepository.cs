@@ -68,5 +68,12 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
             return sale;
 
         }
+
+        public async Task<Sale> UpdateAsync(Sale sale, CancellationToken cancellationToken)
+        {
+            await GetBySaleNumberAsync(sale.SaleNumber, cancellationToken);
+            return await AddAsync(sale, cancellationToken);
+        }
+
     }
 }

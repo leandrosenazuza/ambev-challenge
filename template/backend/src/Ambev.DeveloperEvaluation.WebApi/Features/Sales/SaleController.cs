@@ -1,5 +1,6 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 using Ambev.DeveloperEvaluation.Application.Sales.DTO;
+using Ambev.DeveloperEvaluation.Application.Sales.UpdateSale;
 using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Common.Pagination;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.Query;
@@ -38,7 +39,7 @@ public class SaleController : BaseController
         };
 
         var result = await _mediator.Send(command, cancellationToken);
-        return CreatedAtAction(nameof(GetSaleBySaleNumber), new { saleNumber = result.SaleNumber }, result);
+        return Ok(result);
     }
 
     [HttpGet("{saleNumber:guid}")]
@@ -64,14 +65,12 @@ public class SaleController : BaseController
             SaleNumber = saleDto.SaleNumber,
             SaleDate = saleDto.SaleDate,
             Customer = saleDto.Customer,
-            TotalSaleAmount = saleDto.TotalSaleAmount,
             Branch = saleDto.Branch,
             Items = saleDto.Items,
             IsCancelled = saleDto.IsCancelled
         };
-
         var result = await _mediator.Send(command, cancellationToken);
-        return Ok(result);
+        return CreatedAtAction(nameof(GetSaleBySaleNumber), result);
     }
 
     [HttpDelete("{saleNumber:guid}")]

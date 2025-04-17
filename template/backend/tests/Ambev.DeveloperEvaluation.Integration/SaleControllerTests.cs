@@ -1,9 +1,13 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Sales.DTO;
-using Ambev.DeveloperEvaluation.Domain.Entities; // Adjust namespace as needed
+using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.ORM.Repositories;
 using Ambev.DeveloperEvaluation.WebApi;
+using Ambev.DeveloperEvaluation.WebApi.Common;
+using Ambev.DeveloperEvaluation.WebApi.Features.Sales;
 using Bogus;
+using MediatR;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
@@ -169,50 +173,7 @@ namespace Ambev.DeveloperEvaluation.Integration
             AssertSaleDtoEquality(fakeSaleEntity, returnedSaleDto);
         }
 
-        /*
-                [Fact]
-                public async Task UpdateSale_ReturnsUpdatedSale_WhenDataIsValid()
-                {
-                    // Arrange
-                    var saleNumber = Guid.NewGuid();
-                    var originalSale = GenerateFakeSaleDTO(saleNumber);
-                    var updatedSale = GenerateFakeSaleDTO(saleNumber);
 
-                    // Setup mock repository to return the updated sale
-                    _mockSaleRepository
-                        .UpdateSaleAsync(Arg.Any<SaleDTO>())
-                        .Returns(updatedSale);
-
-                    // Act
-                    var response = await _client.PutAsJsonAsync($"/api/sale/{saleNumber}", updatedSale);
-                    response.EnsureSuccessStatusCode();
-
-                    // Assert
-                    var returnedSale = await response.Content.ReadFromJsonAsync<SaleDTO>();
-                    AssertSaleDtoEquality(updatedSale, returnedSale);
-                }
-
-                [Fact]
-                public async Task DeleteSale_ReturnsSuccess_WhenSaleExists()
-                {
-                    // Arrange
-                    var saleNumber = Guid.NewGuid();
-
-                    // Setup mock repository to indicate successful deletion
-                    _mockSaleRepository
-                        .DeleteSaleAsync(saleNumber)
-                        .Returns(true);
-
-                    // Act
-                    var response = await _client.DeleteAsync($"/api/sale/{saleNumber}");
-                    response.EnsureSuccessStatusCode();
-
-                    // Assert
-                    // You might want to check the response content or status code
-                    Assert.True(response.IsSuccessStatusCode);
-                }*/
-
-        // Helper method to generate fake SaleDTO
         private Sale GenerateFakeSale(Guid? saleNumber = null)
         {
             return new Sale

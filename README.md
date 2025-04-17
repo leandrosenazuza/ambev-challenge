@@ -16,6 +16,18 @@
    1. dotnet ef migrations add InitialMigration --context DefaultContext
    2. dotnet ef database update --context DefaultContext
 
+## Take the collections in the root of the project and put it in you postman
+
+   1. To consume any request, you have to authenticate your api. Until you don't create any user, you have to use the standard user. Here's the curl to generate the token:
+   curl --location 'https://localhost:7181/api/Auth' \
+--header 'accept: text/plain' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "email": "admin@gmail.com",
+  "password": "Admin@123"
+}'
+
+
 
 ## What I think I achieved with this project:
 

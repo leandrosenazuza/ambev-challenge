@@ -25,14 +25,15 @@ public class ValidationExceptionMiddleware
         {
             await HandleValidationExceptionAsync(context, ex);
         }
-        catch (BadHttpRequestException ex)
-        {
-            await HandleNotFoundExceptionAsync(context, ex);
-        }
         catch (UnauthorizedAccessException ex)
         {
             await HandleAuthExceptionAsync(context, ex);
         }
+        catch (BadHttpRequestException ex)
+        {
+            await HandleNotFoundExceptionAsync(context, ex);
+        }
+       
         catch (Exception ex)
         {
             await HandleExceptionAsync(context, ex);

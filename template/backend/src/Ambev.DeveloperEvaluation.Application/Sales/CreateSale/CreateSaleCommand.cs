@@ -1,18 +1,15 @@
-﻿namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale
+﻿using Ambev.DeveloperEvaluation.Application.Sales.DTO;
+using MediatR;
+
+namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale
 {
-    public class CreateSaleCommand
+    public class CreateSaleCommand : IRequest<SaleDTO>
     {
         public Guid SaleNumber { get; set; } = Guid.NewGuid();
         public DateTime SaleDate { get; set; } = DateTime.UtcNow;
         public string Customer { get; set; } = string.Empty;
         public string Branch { get; set; } = string.Empty;
-        public List<SaleItemDto> Items { get; set; } = new List<SaleItemDto>();
-    }
-
-    public class SaleItemDto
-    {
-        public int ProductId { get; set; }
-        public int Quantity { get; set; }
-        public decimal UnitPrice { get; set; }
+        public List<SaleItemDTO> Items { get; set; } = [];
+        public bool IsCancelled { get; set; } = false;
     }
 }

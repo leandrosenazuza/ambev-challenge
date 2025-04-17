@@ -1,10 +1,8 @@
-﻿using AutoMapper;
+﻿using Ambev.DeveloperEvaluation.ORM.Repositories;
+using AutoMapper;
 using MediatR;
-using Ambev.DeveloperEvaluation.ORM.Repositories;
-using Ambev.DeveloperEvaluation.Domain.Entities;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
-using Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
 
 namespace Ambev.DeveloperEvaluation.Application.Products.GetProduct;
 
@@ -28,20 +26,20 @@ public class GetProductHandler : IRequestHandler<GetProductCommand, GetProductRe
     {
 
         var validator = new GetProductValidator();
-            var validationResult = await validator.ValidateAsync(request, cancellationToken);
-            if (!validationResult.IsValid)
-                throw new ValidationException();
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
+            throw new ValidationException();
 
-            var product = await _productRepository.GetByIdAsync(request.Id, cancellationToken);
-            if (product == null)
-                throw new InvalidOperationException($"Product with title {request.Id} does not exists");
+        var product = await _productRepository.GetByIdAsync(request.Id, cancellationToken);
+        if (product == null)
+            throw new InvalidOperationException($"Product with title {request.Id} does not exists");
 
-           // var product = _mapper.Map<Product>(request);
+        // var product = _mapper.Map<Product>(request);
 
-             var result = _mapper.Map<GetProductResult>(product);
+        var result = _mapper.Map<GetProductResult>(product);
         _logger.LogInformation($"Product returned successfully: {product.Id}");
 
-            return result;
-        }
+        return result;
+    }
 
 }

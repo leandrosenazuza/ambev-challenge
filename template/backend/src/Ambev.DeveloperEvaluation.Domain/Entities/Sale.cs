@@ -13,7 +13,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
 
         [Column("sale_date")]
         [Required]
-        public DateTime SaleDate { get; set; } = DateTime.UtcNow;
+        public DateTime SaleDate { get; set; } = DateTime.Now;
 
         [Column("customer")]
         [Required]
@@ -31,25 +31,21 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         public string Branch { get; set; } = string.Empty;
 
         [Column("items")]
-        public List<SaleItem> Items { get; set; } = new List<SaleItem>();
+        public List<SaleItem> Items { get; set; } = [];
 
         [Column("is_cancelled")]
         [Required]
         public bool IsCancelled { get; set; } = false;
 
-        public void CalculateTotal()
+        public void RecalculateSaleTotal()
         {
-            TotalSaleAmount = 0;
-            foreach (var item in Items)
-            {
-                TotalSaleAmount += item.TotalAmount;
-            }
+            TotalSaleAmount = Items.Sum(i => i.TotalAmount);
         }
-        public void PublishEvent(string eventType)
+        public void AddItem(SaleItem item)
         {
-            Console.WriteLine($"Event Published: {eventType} for Sale Number: {SaleNumber}");
+            Items.Add(item);
+            RecalculateSaleTotal();
         }
     }
-
 }
 

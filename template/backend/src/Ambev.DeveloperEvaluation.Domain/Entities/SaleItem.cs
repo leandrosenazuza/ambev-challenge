@@ -28,41 +28,39 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         [Required]
         public decimal TotalAmount { get; set; }
 
-
         public SaleItem() { }
 
         public SaleItem(int productId, int quantity, decimal unitPrice)
         {
+            if (quantity > 20)
+                throw new ArgumentOutOfRangeException(nameof(quantity), "Cannot sell more than 20 items!!!");
+
             ProductId = productId;
             Quantity = quantity;
             UnitPrice = unitPrice;
-            CalculateTotalAmount();
-            ApplyDiscount();
+
+            ApplyDiscountRules();
+
         }
 
-        private void CalculateTotalAmount()
+        private void ApplyDiscountRules()
         {
-            TotalAmount = Quantity * UnitPrice - Discount;
-        }
+            var baseAmount = Quantity * UnitPrice;
 
-        private void ApplyDiscount()
-        {
-            if (Quantity >= 4 && Quantity <= 20)
+            if (Quantity >= 10 && Quantity <= 20)
             {
-                if (Quantity >= 10)
-                {
-                    Discount = TotalAmount * 0.20m;
-                }
-                else
-                {
-                    Discount = TotalAmount * 0.10m;
-                }
+                Discount = baseAmount * 0.20m;
+            }
+            else if (Quantity >= 4)
+            {
+                Discount = baseAmount * 0.10m;
             }
             else
             {
-                Discount = 0;
+                Discount = 0m;
             }
-            CalculateTotalAmount();
+            TotalAmount = baseAmount - Discount;
         }
     }
+
 }

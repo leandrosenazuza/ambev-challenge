@@ -1,5 +1,4 @@
-﻿using System;
-using Ambev.DeveloperEvaluation.Domain.Entities;
+﻿using Ambev.DeveloperEvaluation.Domain.Entities;
 
 namespace Ambev.DeveloperEvaluation.Tests.Domain
 {
@@ -14,7 +13,7 @@ namespace Ambev.DeveloperEvaluation.Tests.Domain
                 Price = 99.99m,
                 Description = "This is a test product description",
                 Category = "Test Category",
-                Image = "https://example.com/test-image.jpg",
+                Image = "test1.jpg",
                 RatingRate = 4.5m,
                 RatingCount = 100,
                 CreatedAt = DateTime.UtcNow
@@ -23,8 +22,8 @@ namespace Ambev.DeveloperEvaluation.Tests.Domain
 
         public static List<Product> GetValidProducts()
         {
-            return new List<Product>
-            {
+            return
+            [
                 new Product
                 {
                     Id = 1,
@@ -32,7 +31,7 @@ namespace Ambev.DeveloperEvaluation.Tests.Domain
                     Price = 29.99m,
                     Description = "First test product description",
                     Category = "Electronics",
-                    Image = "https://example.com/first-image.jpg",
+                    Image = "teste2.jpg",
                     RatingRate = 4.2m,
                     RatingCount = 50
                 },
@@ -43,7 +42,7 @@ namespace Ambev.DeveloperEvaluation.Tests.Domain
                     Price = 49.99m,
                     Description = "Second test product description",
                     Category = "Clothing",
-                    Image = "https://example.com/second-image.jpg",
+                    Image = "test3.jpg",
                     RatingRate = 3.8m,
                     RatingCount = 75
                 },
@@ -54,11 +53,11 @@ namespace Ambev.DeveloperEvaluation.Tests.Domain
                     Price = 99.99m,
                     Description = "Third test product description",
                     Category = "Home",
-                    Image = "https://example.com/third-image.jpg",
+                    Image = "test4.jpg",
                     RatingRate = 4.7m,
                     RatingCount = 120
                 }
-            };
+            ];
         }
 
         public static Product GetProductWithMinimumRequiredFields()
@@ -75,11 +74,11 @@ namespace Ambev.DeveloperEvaluation.Tests.Domain
             return new Product
             {
                 Id = int.MaxValue,
-                Title = new string('A', 255), 
+                Title = new string('A', 255),
                 Price = decimal.MaxValue,
                 Description = new string('A', 1000),
-                Category = new string('A', 100), 
-                Image = new string('A', 500), 
+                Category = new string('A', 100),
+                Image = new string('A', 500),
                 RatingRate = 5m,
                 RatingCount = int.MaxValue
             };

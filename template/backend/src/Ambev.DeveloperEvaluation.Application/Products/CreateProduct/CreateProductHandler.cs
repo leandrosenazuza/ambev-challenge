@@ -1,7 +1,7 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.ORM.Repositories;
-using Ambev.DeveloperEvaluation.Domain.Entities;
+using AutoMapper;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 

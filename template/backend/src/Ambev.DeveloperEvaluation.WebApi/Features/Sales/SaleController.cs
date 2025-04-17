@@ -46,11 +46,6 @@ public class SaleController : BaseController
     {
         var query = new GetSaleBySaleNumberQuery(saleNumber);
         var result = await _mediator.Send(query);
-
-        if (result == null)
-        {
-            return NotFound(new { Message = "Sale not found" });
-        }
         return result;
     }
 
@@ -64,11 +59,6 @@ public class SaleController : BaseController
     [HttpPut("{saleNumber:guid}")]
     public async Task<IActionResult> UpdateSale([FromRoute] Guid saleNumber, [FromBody] SaleDTO saleDto, CancellationToken cancellationToken)
     {
-        if (saleNumber != saleDto.SaleNumber)
-        {
-            return BadRequest(new { Message = "The Sale identifier in the route does not match the request body." });
-        }
-
         var command = new UpdateSaleCommand
         {
             SaleNumber = saleDto.SaleNumber,
@@ -81,12 +71,6 @@ public class SaleController : BaseController
         };
 
         var result = await _mediator.Send(command, cancellationToken);
-
-        if (result == null)
-        {
-            return NotFound(new { Message = "Sale not found." });
-        }
-
         return Ok(result);
     }
 
@@ -95,12 +79,6 @@ public class SaleController : BaseController
     {
         var command = new DeleteSaleCommand(saleNumber);
         var result = await _mediator.Send(command, cancellationToken);
-
-        if (result == null)
-        {
-            return NotFound(new { Message = "Sale not found." });
-        }
-
         return Ok(new { Message = "Sale deleted successfully", Data = result });
     }
 }

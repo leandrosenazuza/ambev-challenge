@@ -1,5 +1,7 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.WebApi.Common.Pagination;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ambev.DeveloperEvaluation.ORM.Repositories
@@ -28,9 +30,6 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         public async Task<bool> DeleteAsync(Guid saleNumber, CancellationToken cancellationToken)
         {
             var sale = await _context.Sales.FirstOrDefaultAsync(s => s.SaleNumber == saleNumber, cancellationToken);
-            if (sale == null)
-                return false;
-
             _context.Sales.Remove(sale);
             var affectedRows = await _context.SaveChangesAsync(cancellationToken);
             return affectedRows > 0;
@@ -59,8 +58,10 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         {
 
             var sale = await _context.Sales
-.Include(s => s.Items)
-.FirstOrDefaultAsync(s => s.SaleNumber == saleNumber);
+                .Include(s => s.Items)
+                .FirstOrDefaultAsync(s => s.SaleNumber == saleNumber);
+
+            if (sale == null) throw new BadHttpRequestException($"Sale with SaleNumber {saleNumber} not found.");
 
             sale.RecalculateSaleTotal();
             _context.SaveChangesAsync();

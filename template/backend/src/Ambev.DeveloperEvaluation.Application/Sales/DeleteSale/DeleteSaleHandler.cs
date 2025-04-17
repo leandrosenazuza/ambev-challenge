@@ -4,6 +4,7 @@ using Ambev.DeveloperEvaluation.ORM.Repositories;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales;
 using AutoMapper;
 using MediatR;
+using OneOf.Types;
 
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.DeleteSale
@@ -24,8 +25,6 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.DeleteSale
         public async Task<Boolean> Handle(DeleteSaleCommand request, CancellationToken cancellationToken)
         {
             var existingSale = await _saleRepository.GetBySaleNumberAsync(request.SaleNumber, cancellationToken);
-            if (existingSale == null)
-                throw new InvalidOperationException($"Sale with Sale Number {request.SaleNumber} not exists");
             return await _saleRepository.DeleteAsync(request.SaleNumber, cancellationToken);
         }
     }

@@ -20,10 +20,6 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale
 
         public async Task<SaleDTO> Handle(CreateSaleCommand command, CancellationToken cancellationToken)
         {
-            var existingSale = await _saleRepository.GetBySaleNumberAsync(command.SaleNumber, cancellationToken);
-            if (existingSale != null)
-                throw new InvalidOperationException($"Sale with Sale Number {command.SaleNumber} already exists");
-
             var sale = _mapper.Map<Sale>(command);
 
             await _saleRepository.CreateAsync(sale, cancellationToken);

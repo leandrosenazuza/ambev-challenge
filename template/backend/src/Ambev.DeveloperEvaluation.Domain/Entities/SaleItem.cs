@@ -3,13 +3,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ambev.DeveloperEvaluation.Domain.Entities
 {
-
+    [Table("SaleItems")]
     public class SaleItem
     {
+        [Column("id")]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+
         [Column("product_id")]
         [Required]
-        [Key]
         public int ProductId { get; set; }
+
+        [ForeignKey("ProductId")]
+        public virtual Product Product { get; set; }
 
         [Column("quantity")]
         [Required]
@@ -40,7 +47,6 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
             UnitPrice = unitPrice;
 
             ApplyDiscountRules();
-
         }
 
         private void ApplyDiscountRules()
@@ -62,5 +68,4 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
             TotalAmount = baseAmount - Discount;
         }
     }
-
 }

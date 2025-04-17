@@ -1,5 +1,6 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 using Ambev.DeveloperEvaluation.Application.Sales.DTO;
+using Ambev.DeveloperEvaluation.Application.Sales.UpdateSale;
 using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Common.Pagination;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.Query;
@@ -38,24 +39,19 @@ public class SaleController : BaseController
         };
 
         var result = await _mediator.Send(command, cancellationToken);
-        return CreatedAtAction(nameof(GetSaleBySaleNumber), new { saleNumber = result.SaleNumber }, result);
+        return Ok(result);
     }
 
     [HttpGet("{saleNumber:guid}")]
-    public async Task<ActionResult<SaleDTO>> GetSaleBySaleNumber(Guid saleNumber)
+    public async Task<IActionResult> GetSaleBySaleNumber(Guid saleNumber)
     {
         var query = new GetSaleBySaleNumberQuery(saleNumber);
         var result = await _mediator.Send(query);
-
-        if (result == null)
-        {
-            return NotFound(new { Message = "Sale not found" });
-        }
-        return result;
+        return Ok(result);
     }
 
     [HttpGet("all")]
-    public async Task<IActionResult> GetAllSales(PaginationParameters parameters, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAllSales([FromQuery] PaginationParameters parameters, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new GetAllSaleQuery(parameters), cancellationToken);
         return Ok(result);
@@ -64,29 +60,16 @@ public class SaleController : BaseController
     [HttpPut("{saleNumber:guid}")]
     public async Task<IActionResult> UpdateSale([FromRoute] Guid saleNumber, [FromBody] SaleDTO saleDto, CancellationToken cancellationToken)
     {
-        if (saleNumber != saleDto.SaleNumber)
-        {
-            return BadRequest(new { Message = "The Sale identifier in the route does not match the request body." });
-        }
-
         var command = new UpdateSaleCommand
         {
-            SaleNumber = saleDto.SaleNumber,
+            SaleNumber = saleNumber,
             SaleDate = saleDto.SaleDate,
             Customer = saleDto.Customer,
-            TotalSaleAmount = saleDto.TotalSaleAmount,
             Branch = saleDto.Branch,
             Items = saleDto.Items,
             IsCancelled = saleDto.IsCancelled
         };
-
         var result = await _mediator.Send(command, cancellationToken);
-
-        if (result == null)
-        {
-            return NotFound(new { Message = "Sale not found." });
-        }
-
         return Ok(result);
     }
 
@@ -95,12 +78,6 @@ public class SaleController : BaseController
     {
         var command = new DeleteSaleCommand(saleNumber);
         var result = await _mediator.Send(command, cancellationToken);
-
-        if (result == null)
-        {
-            return NotFound(new { Message = "Sale not found." });
-        }
-
         return Ok(new { Message = "Sale deleted successfully", Data = result });
     }
 }

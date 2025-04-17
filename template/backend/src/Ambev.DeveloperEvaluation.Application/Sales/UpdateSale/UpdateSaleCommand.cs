@@ -1,9 +1,9 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Sales.DTO;
 using MediatR;
 
-namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
+namespace Ambev.DeveloperEvaluation.Application.Sales.UpdateSale
 {
-    public class UpdateSaleCommand : IRequest<object?>
+    public class UpdateSaleCommand : IRequest<SaleDTO>
     {
         public Guid SaleNumber { get; set; }
         public DateTime SaleDate { get; set; }

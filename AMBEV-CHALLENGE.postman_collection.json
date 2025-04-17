@@ -25,7 +25,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"username\": \"Leandro Zuza\",\n  \"password\": \"Le5ndr0#923\",\n  \"phone\": \"+12345678901\",\n  \"email\": \"leandrosenazuza@gmail.com\",\n  \"status\": 1,\n  \"role\": 1\n}",
+							"raw": "{\n  \"username\": \"admin\",\n  \"password\": \"@ADMIN123\",\n  \"phone\": \"+12345678901\",\n  \"email\": \"admin@gmail.com\",\n  \"status\": 1,\n  \"role\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -148,42 +148,221 @@
 			"name": "PRODUCTS",
 			"item": [
 				{
-					"name": "Products",
+					"name": "Create New Product",
 					"request": {
-						"method": "GET",
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI5ZDJiNGViYi0yZjQ0LTQ3ODMtYjcyYS1kMjkzMzA5NzVjYjYiLCJ1bmlxdWVfbmFtZSI6ImFkbWluIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzQ0OTA5MTgzLCJleHAiOjE3NDQ5Mzc5ODMsImlhdCI6MTc0NDkwOTE4M30.pJzeYcN3ZT5pXuAVPggpRkKyJ7r1QWgO9OHwQdAP8AU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
 						"header": [
 							{
 								"key": "accept",
-								"value": "text/plain"
+								"value": "*/*"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Fjallraven Backpack\",\n  \"branch\": \"Fjallraven\",\n  \"customer\": \"Outdoor Gear Store\",\n  \"price\": 129.99,\n  \"description\": \"Premium laptop\",\n  \"category\": \"men's accessories\",\n  \"image\": \"https://example.com/images/fjallraven-backpack-premium.jpg\",\n  \"rating\": {\n    \"rate\": 4.8,\n    \"count\": 250\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost:5119/api/Products?page=1&size=10",
-							"protocol": "http",
+							"raw": "https://localhost:7181/api/products",
+							"protocol": "https",
 							"host": [
 								"localhost"
 							],
-							"port": "5119",
+							"port": "7181",
 							"path": [
 								"api",
-								"Products"
-							],
-							"query": [
-								{
-									"key": "page",
-									"value": "1"
-								},
-								{
-									"key": "size",
-									"value": "10"
-								}
+								"products"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Create Products",
+					"name": "Update Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI5ZDJiNGViYi0yZjQ0LTQ3ODMtYjcyYS1kMjkzMzA5NzVjYjYiLCJ1bmlxdWVfbmFtZSI6ImFkbWluIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzQ0OTA5MTgzLCJleHAiOjE3NDQ5Mzc5ODMsImlhdCI6MTc0NDkwOTE4M30.pJzeYcN3ZT5pXuAVPggpRkKyJ7r1QWgO9OHwQdAP8AU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\":2,\n  \"title\": \"Teste update\",\n  \"branch\": \"Fjallraven\",\n  \"customer\": \"Outdoor Gear Store\",\n  \"price\": 129.99,\n  \"description\": \"Premium laptop\",\n  \"category\": \"men's accessories\",\n  \"image\": \"https://example.com/images/fjallraven-backpack-premium.jpg\",\n  \"rating\": {\n    \"rate\": 4.8,\n    \"count\": 250\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7181/api/products/2",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7181",
+							"path": [
+								"api",
+								"products",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI5ZDJiNGViYi0yZjQ0LTQ3ODMtYjcyYS1kMjkzMzA5NzVjYjYiLCJ1bmlxdWVfbmFtZSI6ImFkbWluIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzQ0OTA5MTgzLCJleHAiOjE3NDQ5Mzc5ODMsImlhdCI6MTc0NDkwOTE4M30.pJzeYcN3ZT5pXuAVPggpRkKyJ7r1QWgO9OHwQdAP8AU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:7181/api/products/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7181",
+							"path": [
+								"api",
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:7181/api/products/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7181",
+							"path": [
+								"api",
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get ALL",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI5ZDJiNGViYi0yZjQ0LTQ3ODMtYjcyYS1kMjkzMzA5NzVjYjYiLCJ1bmlxdWVfbmFtZSI6ImFkbWluIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzQ0OTA5MTgzLCJleHAiOjE3NDQ5Mzc5ODMsImlhdCI6MTc0NDkwOTE4M30.pJzeYcN3ZT5pXuAVPggpRkKyJ7r1QWgO9OHwQdAP8AU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:7181/api/products/all?Page=1&PageSize=10",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7181",
+							"path": [
+								"api",
+								"products",
+								"all"
+							],
+							"query": [
+								{
+									"key": "Page",
+									"value": "1"
+								},
+								{
+									"key": "PageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SALES",
+			"item": [
+				{
+					"name": "Post Sale",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -198,7 +377,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"title\": \"Pencil\",\n  \"price\": 109.99,\n  \"description\": \"A great product description\",\n  \"category\": \"Electronics\",\n  \"image\": \"https://example.com/product-image.jpg\",\n  \"rating\": {\n    \"rate\": 4.5,\n    \"count\": 100\n  }\n}",
+							"raw": "{\n  \"customer\": \"John Doe\",\n  \"totalSaleAmount\": 150.75,\n  \"branch\": \"Main Branch\",\n  \"items\": [\n    {\n      \"productId\": 103,\n      \"quantity\": 5,\n      \"unitPrice\": 30.00,\n      \"discount\": 0.10,  \n      \"totalAmount\": 145.00\n    }\n  ],\n  \"isCancelled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -206,15 +385,166 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5119/api/Products",
-							"protocol": "http",
+							"raw": "https://localhost:7181/api/sale",
+							"protocol": "https",
 							"host": [
 								"localhost"
 							],
-							"port": "5119",
+							"port": "7181",
 							"path": [
 								"api",
-								"Products"
+								"sale"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Sale",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI3ZTMzMWJlNi1iMmFkLTQzOTUtYTY0My0wMTZhNDdiMWE3ZDIiLCJ1bmlxdWVfbmFtZSI6ImFkbWluIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzQ0OTAxOTA3LCJleHAiOjE3NDQ5MzA3MDcsImlhdCI6MTc0NDkwMTkwN30.ZpG0d2BwPXT5K744f248kQ-YjusN-yMlw7tTTRCkNuc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:7181/api/sale/ddaa6a9b-6440-4606-8517-3d31e7a3d8ba",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7181",
+							"path": [
+								"api",
+								"sale",
+								"ddaa6a9b-6440-4606-8517-3d31e7a3d8ba"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Sale",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:7181/api/sale/9e6003bb-0ee1-4c3f-a8b6-57fb643a38ab",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7181",
+							"path": [
+								"api",
+								"sale",
+								"9e6003bb-0ee1-4c3f-a8b6-57fb643a38ab"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Sale",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"customer\": \"doidinho da silva Doe\",\n  \"totalSaleAmount\": 150.75,\n  \"branch\": \"Main Branch\",\n  \"items\": [\n    {\n      \"productId\": 103,\n      \"quantity\": 5,\n      \"unitPrice\": 30.00,\n      \"discount\": 0.10,  \n      \"totalAmount\": 145.00\n    }\n  ],\n  \"isCancelled\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7181/api/sale/29907098-adee-47d2-af0a-2ca685fa8ccc",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7181",
+							"path": [
+								"api",
+								"sale",
+								"29907098-adee-47d2-af0a-2ca685fa8ccc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI3ZTMzMWJlNi1iMmFkLTQzOTUtYTY0My0wMTZhNDdiMWE3ZDIiLCJ1bmlxdWVfbmFtZSI6ImFkbWluIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzQ0ODk5MzM3LCJleHAiOjE3NDQ5MjgxMzcsImlhdCI6MTc0NDg5OTMzN30.Avltx4syLN90Xxz7NlqhfZVauOcBkvd8W5zRVau-HO0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:7181/api/sale/all?MinDate=2025-04-17&Page=1&PageSize=2",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7181",
+							"path": [
+								"api",
+								"sale",
+								"all"
+							],
+							"query": [
+								{
+									"key": "MinDate",
+									"value": "2025-04-17"
+								},
+								{
+									"key": "Page",
+									"value": "1"
+								},
+								{
+									"key": "PageSize",
+									"value": "2"
+								}
 							]
 						}
 					},

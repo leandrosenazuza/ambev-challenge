@@ -1,16 +1,19 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Sales.DTO;
-using Ambev.DeveloperEvaluation.Domain.Entities; // Adjust namespace as needed
+using Ambev.DeveloperEvaluation.Domain.Entities;
+using Ambev.DeveloperEvaluation.Integration.Helper;
 using Ambev.DeveloperEvaluation.ORM.Repositories;
 using Ambev.DeveloperEvaluation.WebApi;
+using Ambev.DeveloperEvaluation.WebApi.Common.Pagination;
 using Bogus;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Xunit;
 
-namespace Ambev.DeveloperEvaluation.Integration
+namespace Ambev.DeveloperEvaluation.Integration.SaleController
 {
     public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     {
@@ -40,13 +43,69 @@ namespace Ambev.DeveloperEvaluation.Integration
         private readonly HttpClient _client;
         private readonly ISaleRepository _mockSaleRepository;
         private readonly Faker _faker;
+        private readonly string _token;
+
 
         public SaleControllerTests(CustomWebApplicationFactory factory)
         {
             _client = factory.CreateClient();
             _mockSaleRepository = factory.MockSaleRepository;
             _faker = new Faker();
+            _token = TestAuthenticationHelper.GenerateJwtToken();
+            _client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", _token);
         }
+
+        [Theory]
+        [InlineData(1, 2)]
+        [InlineData(2, 3)]
+        public async Task GetAllSales_ReturnsPaginatedResult_WhenParametersAreValid(int page, int pageSize)
+        {
+            var fakeSales = Enumerable.Range(1, 10)
+                .Select(_ => GenerateFakeSale())
+                .ToList();
+
+            var expectedPaginatedResult = new PaginatedResult<Sale>
+            {
+                Items = fakeSales
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList(),
+                TotalItems = fakeSales.Count,
+                CurrentPage = page,
+                TotalPages = (int)Math.Ceiling(fakeSales.Count / (double)pageSize)
+            };
+
+            Console.WriteLine($"Expected - TotalItems: {expectedPaginatedResult.TotalItems}");
+            Console.WriteLine($"Expected - CurrentPage: {expectedPaginatedResult.CurrentPage}");
+            Console.WriteLine($"Expected - TotalPages: {expectedPaginatedResult.TotalPages}");
+
+            _mockSaleRepository
+                .GetAllAsync(Arg.Any<PaginationParameters>(), Arg.Any<CancellationToken>())
+                .Returns(expectedPaginatedResult);
+
+            var response = await _client.GetAsync($"/api/sale/all?Page={page}&PageSize={pageSize}");
+
+            var rawContent = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"Raw Response: {rawContent}");
+
+            response.EnsureSuccessStatusCode();
+
+            var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponseHelper<PaginatedResult<SaleDTO>>>();
+            var returnedResult = apiResponse.Data;
+
+            Console.WriteLine($"Returned - TotalItems: {returnedResult.TotalItems}");
+            Console.WriteLine($"Returned - CurrentPage: {returnedResult.CurrentPage}");
+            Console.WriteLine($"Returned - TotalPages: {returnedResult.TotalPages}");
+
+            Assert.NotNull(returnedResult);
+            Assert.NotNull(returnedResult.Items);
+            Assert.Equal(expectedPaginatedResult.CurrentPage, returnedResult.CurrentPage);
+            Assert.Equal(expectedPaginatedResult.TotalPages, returnedResult.TotalPages);
+            Assert.Equal(expectedPaginatedResult.TotalItems, returnedResult.TotalItems);
+        }
+
+
 
         [Fact]
         public async Task CreateSale_ReturnsCreatedSale_WhenDataIsValid()
@@ -63,10 +122,11 @@ namespace Ambev.DeveloperEvaluation.Integration
             var response = await _client.PostAsJsonAsync("/api/sale", fakeSaleDto);
             response.EnsureSuccessStatusCode();
 
-            var createdSaleDto = await response.Content.ReadFromJsonAsync<SaleDTO>();
+            var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponseHelper<SaleDTO>>();
+            var returnedResult = apiResponse.Data;
 
-            Assert.NotNull(createdSaleDto);
-            AssertSaleDtoEquality(fakeSaleEntity, createdSaleDto);
+            Assert.NotNull(returnedResult);
+            AssertSaleDtoEquality(fakeSaleEntity, returnedResult);
         }
 
         private Sale GenerateFakeSale()
@@ -162,57 +222,14 @@ namespace Ambev.DeveloperEvaluation.Integration
 
             Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType?.ToString());
 
-            var returnedSaleDto = await response.Content.ReadFromJsonAsync<SaleDTO>();
+            var returnedSaleDto = await response.Content.ReadFromJsonAsync<ApiResponseHelper<SaleDTO>>();
 
 
             Assert.NotNull(returnedSaleDto);
-            AssertSaleDtoEquality(fakeSaleEntity, returnedSaleDto);
+            AssertSaleDtoEquality(fakeSaleEntity, returnedSaleDto.Data);
         }
 
-        /*
-                [Fact]
-                public async Task UpdateSale_ReturnsUpdatedSale_WhenDataIsValid()
-                {
-                    // Arrange
-                    var saleNumber = Guid.NewGuid();
-                    var originalSale = GenerateFakeSaleDTO(saleNumber);
-                    var updatedSale = GenerateFakeSaleDTO(saleNumber);
 
-                    // Setup mock repository to return the updated sale
-                    _mockSaleRepository
-                        .UpdateSaleAsync(Arg.Any<SaleDTO>())
-                        .Returns(updatedSale);
-
-                    // Act
-                    var response = await _client.PutAsJsonAsync($"/api/sale/{saleNumber}", updatedSale);
-                    response.EnsureSuccessStatusCode();
-
-                    // Assert
-                    var returnedSale = await response.Content.ReadFromJsonAsync<SaleDTO>();
-                    AssertSaleDtoEquality(updatedSale, returnedSale);
-                }
-
-                [Fact]
-                public async Task DeleteSale_ReturnsSuccess_WhenSaleExists()
-                {
-                    // Arrange
-                    var saleNumber = Guid.NewGuid();
-
-                    // Setup mock repository to indicate successful deletion
-                    _mockSaleRepository
-                        .DeleteSaleAsync(saleNumber)
-                        .Returns(true);
-
-                    // Act
-                    var response = await _client.DeleteAsync($"/api/sale/{saleNumber}");
-                    response.EnsureSuccessStatusCode();
-
-                    // Assert
-                    // You might want to check the response content or status code
-                    Assert.True(response.IsSuccessStatusCode);
-                }*/
-
-        // Helper method to generate fake SaleDTO
         private Sale GenerateFakeSale(Guid? saleNumber = null)
         {
             return new Sale

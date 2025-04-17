@@ -17,10 +17,4 @@
     <PackageReference Include="System.Diagnostics.Tools" Version="4.3.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Products\CreateProduct\" />
-    <Folder Include="Products\DeleteProduct\" />
-    <Folder Include="Products\PutProduct\" />
-  </ItemGroup>
-
 </Project>

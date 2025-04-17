@@ -51,8 +51,8 @@ namespace Ambev.DeveloperEvaluation.Integration
         [Fact]
         public async Task CreateSale_ReturnsCreatedSale_WhenDataIsValid()
         {
-          
-            var fakeSaleEntity = GenerateFakeSale(); 
+
+            var fakeSaleEntity = GenerateFakeSale();
             var fakeSaleDto = MapSaleToDto(fakeSaleEntity);
 
 

@@ -93,7 +93,7 @@ public class SaleController : BaseController
     [HttpDelete("{saleNumber:guid}")]
     public async Task<IActionResult> DeleteSale([FromRoute] Guid saleNumber, CancellationToken cancellationToken)
     {
-        var command = new DeleteSaleCommand { SaleNumber = saleNumber };
+        var command = new DeleteSaleCommand(saleNumber);
         var result = await _mediator.Send(command, cancellationToken);
 
         if (result == null)

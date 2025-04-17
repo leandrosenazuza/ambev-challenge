@@ -22,7 +22,7 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale
         {
             var existingSale = await _saleRepository.GetBySaleNumberAsync(command.SaleNumber, cancellationToken);
             if (existingSale != null)
-                throw new InvalidOperationException($"User with Sale Number {command.SaleNumber} already exists");
+                throw new InvalidOperationException($"Sale with Sale Number {command.SaleNumber} already exists");
 
             var sale = _mapper.Map<Sale>(command);
 

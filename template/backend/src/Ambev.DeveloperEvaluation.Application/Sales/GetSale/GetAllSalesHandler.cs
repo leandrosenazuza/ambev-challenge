@@ -4,9 +4,6 @@ using Ambev.DeveloperEvaluation.WebApi.Common.Pagination;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.Query;
 using AutoMapper;
 using MediatR;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.GetSale
 {

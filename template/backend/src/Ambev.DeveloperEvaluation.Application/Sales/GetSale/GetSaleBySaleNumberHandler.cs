@@ -1,13 +1,9 @@
-﻿using Ambev.DeveloperEvaluation.Application.Products.GetProduct;
-using Ambev.DeveloperEvaluation.Application.Sales.DTO;
+﻿using Ambev.DeveloperEvaluation.Application.Sales.DTO;
 using Ambev.DeveloperEvaluation.ORM.Repositories;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.Query;
 using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.GetSale
 {
@@ -34,7 +30,7 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.GetSale
                 if (sale == null)
                 {
                     _logger.LogWarning("Sale not found for SaleNumber: {SaleNumber}", request.SaleNumber);
-                    return null; // Or throw an exception if preferred
+                    return null;
                 }
 
                 var result = _mapper.Map<SaleDTO>(sale);

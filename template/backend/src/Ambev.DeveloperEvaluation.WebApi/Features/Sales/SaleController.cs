@@ -51,7 +51,7 @@ public class SaleController : BaseController
         {
             return NotFound(new { Message = "Sale not found" });
         }
-        return result; 
+        return result;
     }
 
     [HttpGet]
@@ -71,7 +71,6 @@ public class SaleController : BaseController
 
         var command = new UpdateSaleCommand
         {
-            // Map properties from SaleDTO to UpdateSaleCommand if necessary
             SaleNumber = saleDto.SaleNumber,
             SaleDate = saleDto.SaleDate,
             Customer = saleDto.Customer,
@@ -88,13 +87,13 @@ public class SaleController : BaseController
             return NotFound(new { Message = "Sale not found." });
         }
 
-        return Ok(result); 
+        return Ok(result);
     }
 
     [HttpDelete("{saleNumber:guid}")]
     public async Task<IActionResult> DeleteSale([FromRoute] Guid saleNumber, CancellationToken cancellationToken)
     {
-        var command = new DeleteSaleCommand { SaleNumber = saleNumber }; 
+        var command = new DeleteSaleCommand { SaleNumber = saleNumber };
         var result = await _mediator.Send(command, cancellationToken);
 
         if (result == null)
@@ -102,6 +101,6 @@ public class SaleController : BaseController
             return NotFound(new { Message = "Sale not found." });
         }
 
-        return Ok(new { Message = "Sale deleted successfully", Data = result }); 
+        return Ok(new { Message = "Sale deleted successfully", Data = result });
     }
 }

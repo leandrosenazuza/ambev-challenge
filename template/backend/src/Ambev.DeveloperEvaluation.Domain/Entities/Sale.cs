@@ -37,19 +37,15 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         [Required]
         public bool IsCancelled { get; set; } = false;
 
-        public void CalculateTotal()
+        public void RecalculateSaleTotal()
         {
-            TotalSaleAmount = 0;
-            foreach (var item in Items)
-            {
-                TotalSaleAmount += item.TotalAmount;
-            }
+            TotalSaleAmount = Items.Sum(i => i.TotalAmount);
         }
-        public void PublishEvent(string eventType)
+        public void AddItem(SaleItem item)
         {
-            Console.WriteLine($"Event Published: {eventType} for Sale Number: {SaleNumber}");
+            Items.Add(item);
+            RecalculateSaleTotal();
         }
     }
-
 }
 

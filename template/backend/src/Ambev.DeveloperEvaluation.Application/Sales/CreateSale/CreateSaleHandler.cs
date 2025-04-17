@@ -25,7 +25,6 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale
                 throw new InvalidOperationException($"User with Sale Number {command.SaleNumber} already exists");
 
             var sale = _mapper.Map<Sale>(command);
-            sale.CalculateTotal();
 
             await _saleRepository.CreateAsync(sale, cancellationToken);
 

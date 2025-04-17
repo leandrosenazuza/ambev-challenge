@@ -1,9 +1,6 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.WebApi.Common.Pagination;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Ambev.DeveloperEvaluation.ORM.Repositories
 {
@@ -60,8 +57,15 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
 
         public async Task<Sale> GetBySaleNumberAsync(Guid saleNumber, CancellationToken cancellationToken)
         {
-            return await _context.Sales
-                       .FirstOrDefaultAsync(u => u.SaleNumber == saleNumber, cancellationToken);
+
+            var sale = await _context.Sales
+.Include(s => s.Items)
+.FirstOrDefaultAsync(s => s.SaleNumber == saleNumber);
+
+            sale.RecalculateSaleTotal();
+            _context.SaveChangesAsync();
+            return sale;
+
         }
     }
 }

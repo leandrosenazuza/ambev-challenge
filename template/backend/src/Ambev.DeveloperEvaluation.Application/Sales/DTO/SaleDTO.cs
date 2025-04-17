@@ -1,5 +1,4 @@
-﻿
-namespace Ambev.DeveloperEvaluation.Application.Sales.DTO
+﻿namespace Ambev.DeveloperEvaluation.Application.Sales.DTO
 {
     public class SaleDTO
     {
@@ -10,5 +9,15 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.DTO
         public string Branch { get; set; } = string.Empty;
         public List<SaleItemDTO> Items { get; set; } = [];
         public bool IsCancelled { get; set; }
+
+        public void RecalculateSaleTotal()
+        {
+            TotalSaleAmount = Items.Sum(i => i.TotalAmount);
+        }
+        public void AddItem(SaleItemDTO item)
+        {
+            Items.Add(item);
+            RecalculateSaleTotal();
+        }
     }
 }

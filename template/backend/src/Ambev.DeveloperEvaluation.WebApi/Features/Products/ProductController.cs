@@ -26,7 +26,7 @@ public class ProductController : BaseController
     public async Task<IActionResult> GetProductById(int id, CancellationToken cancellationToken)
     {
         var query = new GetProductByIdQuery(id);
-        var result = await _mediator.Send(id, cancellationToken);
+        var result = await _mediator.Send(query, cancellationToken);
 
         return Ok(result);
     }
@@ -37,6 +37,7 @@ public class ProductController : BaseController
         var ratingCommand = new ProductRatingCommand(productDto.Rating.Rate, productDto.Rating.Count);
         var command = new CreateProductCommand(
             productDto.Id,
+            productDto.Title,
             productDto.Price,
             productDto.Description,
             productDto.Category,

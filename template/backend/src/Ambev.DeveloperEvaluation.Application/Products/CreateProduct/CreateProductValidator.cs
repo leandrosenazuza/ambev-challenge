@@ -6,10 +6,7 @@ namespace Ambev.DeveloperEvaluation.Application.Products.CreateProduct
     {
         public CreateProductValidator()
         {
-            RuleFor(x => x.Id)
-                .NotEmpty()
-                .WithMessage("Title must not exceed 255 characters");
-
+      
             RuleFor(x => x.Price)
                 .GreaterThanOrEqualTo(0)
                 .WithMessage("Price must be greater than or equal to 0");

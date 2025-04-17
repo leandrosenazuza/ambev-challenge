@@ -1,7 +1,6 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.WebApi.Common.Pagination;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -63,9 +62,9 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
 
         private IQueryable<Sale> ApplyFilters(IQueryable<Sale> query, PaginationParameters parameters)
         {
-            if (!string.IsNullOrEmpty(parameters.CustomerName))
+            if (!string.IsNullOrEmpty(parameters.Name))
             {
-                query = query.Where(s => s.Customer.Contains(parameters.CustomerName));
+                query = query.Where(s => s.Customer.Contains(parameters.Name));
             }
 
             if (parameters.MinTotal.HasValue)
@@ -95,7 +94,7 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         {
             if (string.IsNullOrEmpty(orderBy))
             {
-                return query.OrderByDescending(s => s.SaleDate); 
+                return query.OrderByDescending(s => s.SaleDate);
             }
 
             // Parse the ordering string

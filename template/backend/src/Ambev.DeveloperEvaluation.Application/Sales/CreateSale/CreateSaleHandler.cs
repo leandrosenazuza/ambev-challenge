@@ -19,7 +19,7 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale
         }
 
         public async Task<SaleDTO> Handle(CreateSaleCommand command, CancellationToken cancellationToken)
-        { 
+        {
             var sale = _mapper.Map<Sale>(command);
 
             await _saleRepository.CreateAsync(sale, cancellationToken);

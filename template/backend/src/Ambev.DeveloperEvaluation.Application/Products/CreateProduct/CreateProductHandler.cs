@@ -1,5 +1,6 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.ORM.Repositories;
+using Ambev.DeveloperEvaluation.WebApi.Features.Products.DTO;
 using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -7,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
 
-public class CreateProductHandler : IRequestHandler<CreateProductCommand, CreateProductResult>
+public class CreateProductHandler : IRequestHandler<CreateProductCommand, ProductDTO>
 {
     private readonly IProductRepository _productRepository;
     private readonly IMapper _mapper;
@@ -23,7 +24,7 @@ public class CreateProductHandler : IRequestHandler<CreateProductCommand, Create
         _logger = logger;
     }
 
-    public async Task<CreateProductResult> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+    public async Task<ProductDTO> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
         try
         {
@@ -32,9 +33,9 @@ public class CreateProductHandler : IRequestHandler<CreateProductCommand, Create
             if (!validationResult.IsValid)
                 throw new ValidationException();
 
-            var existingProduct = await _productRepository.GetByTitleAsync(request.Title, cancellationToken);
+            var existingProduct = await _productRepository.GetByIdAsync(request.Id, cancellationToken);
             if (existingProduct != null)
-                throw new InvalidOperationException($"Product with title {request.Title} already exists");
+                throw new InvalidOperationException($"Product with title {request.Id} already exists");
 
             var product = _mapper.Map<Product>(request);
 
@@ -42,7 +43,7 @@ public class CreateProductHandler : IRequestHandler<CreateProductCommand, Create
 
             _logger.LogInformation($"Product created successfully: {createdProduct.Id}");
 
-            var result = _mapper.Map<CreateProductResult>(createdProduct);
+            var result = _mapper.Map<ProductDTO>(createdProduct);
             return result;
         }
         catch (Exception ex)

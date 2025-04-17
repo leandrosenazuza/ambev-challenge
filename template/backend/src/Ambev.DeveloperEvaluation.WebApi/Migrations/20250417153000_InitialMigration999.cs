@@ -5,7 +5,7 @@
 namespace Ambev.DeveloperEvaluation.WebApi.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration8 : Migration
+    public partial class InitialMigration999 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -1,12 +1,7 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Enums;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ambev.DeveloperEvaluation.ORM.Config
 {
@@ -25,7 +20,7 @@ namespace Ambev.DeveloperEvaluation.ORM.Config
                     Username = "admin",
                     Email = "admin@gmail.com",
                     Phone = "+12345678901",
-                    Password = BCrypt.Net.BCrypt.HashPassword("Admin@123"), 
+                    Password = BCrypt.Net.BCrypt.HashPassword("Admin@123"),
                     Role = UserRole.Admin,
                     Status = UserStatus.Active,
                     CreatedAt = DateTime.UtcNow

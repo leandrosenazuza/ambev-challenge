@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace Ambev.DeveloperEvaluation.WebApi.Common;
+﻿namespace Ambev.DeveloperEvaluation.WebApi.Common;
 
 public class GenericErrorDetail
 {
@@ -11,7 +9,8 @@ public class GenericErrorDetail
     public string type { get; set; }
     public string error { get; set; }
     public string detail { get; set; }
-    public GenericErrorDetail(string type, string error, string detail) { 
+    public GenericErrorDetail(string type, string error, string detail)
+    {
         this.type = type;
         this.error = error;
         this.detail = detail;

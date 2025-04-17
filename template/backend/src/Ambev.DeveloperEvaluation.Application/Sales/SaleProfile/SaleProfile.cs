@@ -27,7 +27,7 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.SaleProfile
             .ToList()));
 
             CreateMap<UpdateSaleCommand, Sale>()
-     
+
             .ForMember(dest => dest.SaleDate, opt =>
                 opt.MapFrom(src => src.SaleDate == default ? DateTime.UtcNow : src.SaleDate))
             .ForMember(dest => dest.TotalSaleAmount, opt =>

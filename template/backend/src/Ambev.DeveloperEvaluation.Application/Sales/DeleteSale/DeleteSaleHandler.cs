@@ -1,10 +1,7 @@
-﻿using Ambev.DeveloperEvaluation.Application.Sales.DTO;
-using Ambev.DeveloperEvaluation.Domain.Entities;
-using Ambev.DeveloperEvaluation.ORM.Repositories;
+﻿using Ambev.DeveloperEvaluation.ORM.Repositories;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales;
 using AutoMapper;
 using MediatR;
-using OneOf.Types;
 
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.DeleteSale

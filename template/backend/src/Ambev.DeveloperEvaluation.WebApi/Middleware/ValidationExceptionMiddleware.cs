@@ -1,8 +1,4 @@
-﻿using Ambev.DeveloperEvaluation.Common.Validation;
-using Ambev.DeveloperEvaluation.WebApi.Common;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Ambev.DeveloperEvaluation.WebApi.Common;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
@@ -33,7 +29,7 @@ public class ValidationExceptionMiddleware
         {
             await HandleNotFoundExceptionAsync(context, ex);
         }
-       
+
         catch (Exception ex)
         {
             await HandleExceptionAsync(context, ex);
@@ -74,8 +70,8 @@ public class ValidationExceptionMiddleware
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
-        var response = new GenericErrorDetail("InternalServerError", "Internal Server Error", exception.Message );
-        
+        var response = new GenericErrorDetail("InternalServerError", "Internal Server Error", exception.Message);
+
 
         return SerializeResponse(context, response);
     }

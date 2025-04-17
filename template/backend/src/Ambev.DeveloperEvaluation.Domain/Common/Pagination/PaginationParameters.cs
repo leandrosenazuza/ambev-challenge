@@ -3,10 +3,11 @@
 
 public class PaginationParameters
 {
-    public string? CustomerName { get; set; }
+    public string? Name { get; set; }
+    public string? Category { get; set; }
     public decimal? MinTotal { get; set; }
     public decimal? MaxTotal { get; set; }
-   
+
     private DateTime? _minDate;
     public DateTime? MinDate
     {

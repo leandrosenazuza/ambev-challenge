@@ -3,20 +3,14 @@ using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Integration.Helper;
 using Ambev.DeveloperEvaluation.ORM.Repositories;
 using Ambev.DeveloperEvaluation.WebApi;
-using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Common.Pagination;
-using Ambev.DeveloperEvaluation.WebApi.Features.Sales;
 using Bogus;
-using MediatR;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json.Linq;
 using NSubstitute;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text.Json;
 using Xunit;
 
 namespace Ambev.DeveloperEvaluation.Integration.SaleController

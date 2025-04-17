@@ -27,12 +27,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Products\DeleteProduct\" />
     <Folder Include="Features\Users\GetUser\" />
     <Folder Include="Features\Users\DeleteUser\" />
     <Folder Include="Features\Users\ListUsers\" />
     <Folder Include="Features\Users\UpdateUser\" />
-    <Folder Include="Mappings\Carts\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

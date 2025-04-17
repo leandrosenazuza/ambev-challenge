@@ -54,7 +54,7 @@ public class SaleController : BaseController
         return result;
     }
 
-    [HttpGet]
+    [HttpGet("all")]
     public async Task<IActionResult> GetAllSales(PaginationParameters parameters, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new GetAllSaleQuery(parameters), cancellationToken);

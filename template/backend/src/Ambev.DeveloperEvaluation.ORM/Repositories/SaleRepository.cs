@@ -38,7 +38,7 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
 
         public async Task<PaginatedResult<Sale>> GetAllAsync(PaginationParameters parameters, CancellationToken cancellationToken)
         {
-            var query = _context.Sales.AsQueryable();
+            var query = _context.Sales.Include(s => s.Items).AsQueryable();
 
             var totalItems = await query.CountAsync(cancellationToken);
             var items = await query

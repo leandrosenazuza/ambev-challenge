@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace Ambev.DeveloperEvaluation.ORM.Repositories
 {
     public class SaleRepository : ISaleRepository
@@ -71,8 +72,16 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
 
         public async Task<Sale> UpdateAsync(Sale sale, CancellationToken cancellationToken)
         {
-            await GetBySaleNumberAsync(sale.SaleNumber, cancellationToken);
-            return await AddAsync(sale, cancellationToken);
+            var existingSale = await _context.Sales
+                .FirstOrDefaultAsync(s => s.SaleNumber == sale.SaleNumber, cancellationToken);
+
+            _context.Entry(existingSale).State = EntityState.Detached;
+
+            _context.Sales.Attach(sale);
+            _context.Entry(sale).State = EntityState.Modified;
+
+            await _context.SaveChangesAsync(cancellationToken);
+            return sale;
         }
 
     }

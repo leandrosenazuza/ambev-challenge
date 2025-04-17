@@ -28,7 +28,7 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.UpdateSale
         {
             var sale = _mapper.Map<Sale>(command);
 
-            await _saleRepository.CreateAsync(sale, cancellationToken);
+            await _saleRepository.UpdateAsync(sale, cancellationToken);
 
             //sale.PublishEvent("SaleCreated"); TODO
             var response = _mapper.Map<SaleDTO>(sale);

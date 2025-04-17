@@ -62,7 +62,7 @@ public class SaleController : BaseController
     {
         var command = new UpdateSaleCommand
         {
-            SaleNumber = saleDto.SaleNumber,
+            SaleNumber = saleNumber,
             SaleDate = saleDto.SaleDate,
             Customer = saleDto.Customer,
             Branch = saleDto.Branch,
@@ -70,7 +70,7 @@ public class SaleController : BaseController
             IsCancelled = saleDto.IsCancelled
         };
         var result = await _mediator.Send(command, cancellationToken);
-        return CreatedAtAction(nameof(GetSaleBySaleNumber), result);
+        return Ok(result);
     }
 
     [HttpDelete("{saleNumber:guid}")]

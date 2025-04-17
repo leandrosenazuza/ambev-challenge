@@ -10,5 +10,6 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         Task<Sale> AddAsync(Sale sale, CancellationToken cancellationToken = default);
         Task<bool> DeleteAsync(Guid saleNumber, CancellationToken cancellationToken = default);
         Task<PaginatedResult<Sale>> GetAllAsync(PaginationParameters parameters, CancellationToken cancellationToken = default);
+        Task<Sale> UpdateAsync(Sale sale, CancellationToken cancellationToken);
     }
 }

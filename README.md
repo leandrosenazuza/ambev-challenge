@@ -46,7 +46,7 @@
 9. API design and RESTful service implementation ✅
 10. Version control with Git  ✅
 11. Understanding of both relational and non relational database systems ✅
-12. Data generation and management for testing purposes (using Faker) ✅ | ❌
+12. Data generation and management for testing purposes (using Faker) ✅ 
 13. Code organization and project structure ✅
 14. Implementation of pagination, filtering, and sorting in APIs✅
 15. Error handling and API response formatting ✅
